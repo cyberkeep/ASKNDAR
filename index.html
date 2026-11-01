@@ -276,16 +276,58 @@ a { color: inherit; text-decoration: none; }
       </g>
     </svg>`;
 
-    // تحويل الـ SVG لـ Base64 آمن لتوافقيته التامة كروابط خارجية ومجالات
-    const base64Icon = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(App.rawSvgIcon)));
+    // دالة إنشاء أيقونة PNG حقيقية لمنع نظام Windows والـ Manifest من إظهار أيقونة "م" الرمادية
+    const generatePngDataUrl = (size) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      
+      // خلفية داكنة فخمة منسجمة مع النظام
+      const grad = ctx.createLinearGradient(0, 0, size, size);
+      grad.addColorStop(0, '#0f2b4c');
+      grad.addColorStop(0.5, '#07182e');
+      grad.addColorStop(1, '#040e1c');
+      
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, size * 0.22);
+      ctx.fill();
 
-    // تحديث أيقونة الموقع والأجهزة
+      // إطار ذهبي
+      ctx.strokeStyle = '#f6d365';
+      ctx.lineWidth = size * 0.02;
+      ctx.strokeRect(size * 0.04, size * 0.04, size * 0.92, size * 0.92);
+
+      // رسم الشعار ثلاثي الأبعاد
+      ctx.fillStyle = '#f6d365';
+      // قبعة التخرج
+      ctx.beginPath();
+      ctx.moveTo(size * 0.5, size * 0.22);
+      ctx.lineTo(size * 0.8, size * 0.36);
+      ctx.lineTo(size * 0.5, size * 0.50);
+      ctx.lineTo(size * 0.2, size * 0.36);
+      ctx.closePath();
+      ctx.fill();
+
+      // كتاب التخرج الداخلي
+      ctx.fillStyle = '#2563eb';
+      ctx.fillRect(size * 0.28, size * 0.52, size * 0.44, size * 0.22);
+
+      return canvas.toDataURL('image/png');
+    };
+
+    // توليد أيقونة PNG حقيقية وموثوقة لسطح المكتب
+    const pngIcon192 = generatePngDataUrl(192);
+    const pngIcon512 = generatePngDataUrl(512);
+
+    // تحديث أيقونة Favicon و Apple
     const favEl = document.getElementById('appFavicon');
-    if (favEl) favEl.setAttribute('href', base64Icon);
+    if (favEl) favEl.setAttribute('href', pngIcon192);
     const appleEl = document.getElementById('appleTouchIcon');
-    if (appleEl) appleEl.setAttribute('href', base64Icon);
+    if (appleEl) appleEl.setAttribute('href', pngIcon512);
 
-    // 2. توليد ملف manifest.json ديناميكياً مع الأيقونة المحدثة
+    // 2. تحديث manifest.json بأيقونات PNG حقيقية ومصنفة كـ png لتتعرف عليها أنظمة Windows و Android
     const manifestData = {
       name: "مركز عمر القيسر لتعليم اللغة الإنجليزية",
       short_name: "مركز القيسر",
@@ -297,18 +339,18 @@ a { color: inherit; text-decoration: none; }
       background_color: "#07182e",
       theme_color: "#0b2340",
       icons: [
-        { src: base64Icon, sizes: "192x192", type: "image/svg+xml", purpose: "any maskable" },
-        { src: base64Icon, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
+        { src: pngIcon192, sizes: "192x192", type: "image/png", purpose: "any maskable" },
+        { src: pngIcon512, sizes: "512x512", type: "image/png", purpose: "any maskable" }
       ]
     };
-    App.iconUrl = base64Icon;
+    App.iconUrl = pngIcon512;
     const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
     document.getElementById('manifestLink').setAttribute('href', URL.createObjectURL(manifestBlob));
 
     // 3. تسجيل Service Worker للعمل في وضع Offline ودعم PWA
     if ('serviceWorker' in navigator) {
       const swCode = `
-        const CACHE_NAME = 'alqaysar-pwa-v5';
+        const CACHE_NAME = 'alqaysar-pwa-v6';
         self.addEventListener('install', (e) => { self.skipWaiting(); });
         self.addEventListener('activate', (e) => { e.waitUntil(self.clients.claim()); });
         self.addEventListener('fetch', (e) => {
