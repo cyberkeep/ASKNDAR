@@ -14,7 +14,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230b2340'/%3E%3Cpath d='M20 22h24v18a6 6 0 0 1-6 6H26a6 6 0 0 1-6-6V22Z' fill='%232f7dfa'/%3E%3Cpath d='M16 20l16-8 16 8-16 8-16-8Z' fill='%23fff'/%3E%3C/svg%3E">
+  <link id="appFavicon" rel="icon" type="image/svg+xml">
+  <link id="appleTouchIcon" rel="apple-touch-icon">
   
   <!-- إعدادات الـ PWA والهواتف -->
   <link id="manifestLink" rel="manifest">
@@ -246,11 +247,53 @@ a { color: inherit; text-decoration: none; }
 
   // --------- إعداد وتفعيل PWA و Service Worker بشكل كامل ---------
   App.initPWA = () => {
-    // 1. إنشاء رمز SVG شفاف للأيقونة بدقة عالية للتوافق مع أجهزة المحمول والكمبيوتر
-    const svgIcon = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%230b2340'/><path d='M160 176h192v144a48 48 0 0 1-48 48H208a48 48 0 0 1-48-48V176Z' fill='%232f7dfa'/><path d='M128 160l128-64 128 64-128 64-128-64Z' fill='%23fff'/></svg>`;
+    // 1. تصميم أيقونة احترافية فاخرة بجودة عالية لسطح المكتب والهواتف (كحلي وذهبي مع قبعة تخرج وكتاب)
+    const svgIcon = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
+      <defs>
+        <linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'>
+          <stop offset='0%' stop-color='#0f2b4c'/>
+          <stop offset='50%' stop-color='#07182e'/>
+          <stop offset='100%' stop-color='#040e1c'/>
+        </linearGradient>
+        <linearGradient id='gold' x1='0%' y1='0%' x2='100%' y2='100%'>
+          <stop offset='0%' stop-color='#f6d365'/>
+          <stop offset='100%' stop-color='#fda085'/>
+        </linearGradient>
+        <linearGradient id='blue' x1='0%' y1='0%' x2='100%' y2='100%'>
+          <stop offset='0%' stop-color='#3b82f6'/>
+          <stop offset='100%' stop-color='#1d4ed8'/>
+        </linearGradient>
+        <filter id='shadow' x='-20%' y='-20%' width='140%' height='140%'>
+          <dropShadow dx='0' dy='12' stdDeviation='16' flood-color='#000' flood-opacity='0.4'/>
+        </filter>
+      </defs>
+      <!-- الخلفية -->
+      <rect width='512' height='512' rx='112' fill='url(%23bg)'/>
+      <rect x='16' y='16' width='480' height='480' rx='96' fill='none' stroke='url(%23gold)' stroke-width='6' stroke-opacity='0.3'/>
+      
+      <!-- الرسم المالي والأكاديمي (قبعة تخرج وكتاب) -->
+      <g filter='url(%23shadow)'>
+        <!-- كتاب مفتوح -->
+        <path d='M128 320c48-24 96-12 128 12 32-24 80-36 128-12v-120c-48-24-96-12-128 12-32-24-80-36-128-12z' fill='url(%23blue)' opacity='0.9'/>
+        <path d='M256 212v120' stroke='#fff' stroke-width='8' stroke-linecap='round'/>
+        
+        <!-- قبعة التخرج -->
+        <path d='M256 120l144 64-144 64-144-64z' fill='url(%23gold)'/>
+        <path d='M160 212v52c0 32 43 58 96 58s96-26 96-58v-52' fill='none' stroke='url(%23gold)' stroke-width='16' stroke-linecap='round'/>
+        <path d='M376 190v72' stroke='url(%23gold)' stroke-width='10' stroke-linecap='round'/>
+        <circle cx='376' cy='268' r='12' fill='url(%23gold)'/>
+      </g>
+    </svg>`;
+
     const iconUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgIcon);
 
-    // 2. توليد ملف manifest.json ديناميكياً مع كافة القياسات المطلوبة للتثبيت المباشر
+    // تحديث أيقونة الموقع والأجهزة
+    const favEl = document.getElementById('appFavicon');
+    if (favEl) favEl.setAttribute('href', iconUrl);
+    const appleEl = document.getElementById('appleTouchIcon');
+    if (appleEl) appleEl.setAttribute('href', iconUrl);
+
+    // 2. توليد ملف manifest.json ديناميكياً مع الأيقونة المحدثة
     const manifestData = {
       name: "مركز عمر القيسر لتعليم اللغة الإنجليزية",
       short_name: "مركز القيسر",
