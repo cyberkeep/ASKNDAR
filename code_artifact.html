@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<!--
+  مركز عمر القيسر لتعليم اللغة الإنجليزية — نظام إدارة مستقل
+  ملف واحد متكامل يعمل مباشرة في المتصفح دون الحاجة إلى خادم.
+  يحتوي على زرين لتصدير واستيراد كامل البيانات والمدخلات في لوحة التحكم الرئيسية.
+-->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b2340">
+  <meta name="description" content="نظام إدارة مركز عمر القيسر لتعليم اللغة الإنجليزية">
+  <title>مركز عمر القيسر | نظام إدارة المركز</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230b2340'/%3E%3Cpath d='M20 22h24v18a6 6 0 0 1-6 6H26a6 6 0 0 1-6-6V22Z' fill='%232f7dfa'/%3E%3Cpath d='M16 20l16-8 16 8-16 8-16-8Z' fill='%23fff'/%3E%3C/svg%3E">
+  
+  <!-- إعدادات الـ PWA والهواتف -->
+  <link id="manifestLink" rel="manifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مركز القيسر">
+
+  <style>
+/* =========================================================
+   نظام التصميم والأنماط البصرية - مركز عمر القيسر
+   ========================================================= */
+:root {
+  --font: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+  --navy-950: #07182e;
+  --navy-900: #0b2340;
+  --navy-850: #102b4c;
+  --navy-800: #14355c;
+  --blue-700: #1d4ed8;
+  --blue-600: #2563eb;
+  --blue-500: #2f7dfa;
+  --blue-400: #5b9aff;
+  --blue-100: #dbeafe;
+  --blue-50: #eff6ff;
+  --bg: #f4f7fb;
+  --bg-soft: #eef3f9;
+  --surface: #ffffff;
+  --text: #10243f;
+  --text-soft: #344861;
+  --muted: #5a6a7e;
+  --muted-light: #647186;
+  --line: #e5ebf2;
+  --line-strong: #d7e0ea;
+  --green: #087a52;
+  --green-bg: #e8f8f1;
+  --amber: #b7791f;
+  --amber-bg: #fff7e6;
+  --red: #c53030;
+  --red-bg: #fdeeee;
+  --violet: #7c5cbf;
+  --teal: #0f8b8d;
+  --sidebar-w: 272px;
+  --topbar-h: 82px;
+  --radius-sm: 10px;
+  --radius: 14px;
+  --radius-lg: 18px;
+  --shadow-sm: 0 1px 2px rgba(16, 36, 63, 0.035), 0 5px 16px rgba(16, 36, 63, 0.035);
+  --shadow-md: 0 12px 34px rgba(13, 35, 64, 0.09);
+  --shadow-lg: 0 24px 70px rgba(7, 24, 46, 0.2);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font);
+  background: radial-gradient(circle at 7% 0%, rgba(47, 125, 250, 0.07), transparent 28rem), var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+body.modal-open { overflow: hidden; }
+
+button, input, select, textarea { font-family: inherit; font-size: inherit; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+::selection { color: #fff; background: var(--blue-600); }
+:focus-visible { outline: 3px solid rgba(47, 125, 250, 0.35); outline-offset: 2px; }
+
+.icon { display: inline-block; flex: 0 0 auto; vertical-align: middle; }
+[hidden] { display: none !important; }
+
+/* ---------- Layout Shell ---------- */
+.app-shell { min-height: 100vh; }
+.app-main { min-height: 100vh; margin-right: var(--sidebar-w); display: flex; flex-direction: column; }
+.main-content { width: 100%; max-width: 1720px; margin: 0 auto; padding: 30px 34px 52px; flex: 1; }
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  position: fixed; top: 0; bottom: 0; right: 0; width: var(--sidebar-w);
+  background: radial-gradient(circle at 110% -8%, rgba(47, 125, 250, 0.28), transparent 23rem),
+              linear-gradient(178deg, #0c2748 0%, #091d36 54%, #07182e 100%);
+  color: #fff; z-index: 60; overflow: hidden; border-left: 1px solid rgba(255, 255, 255, 0.055);
+  transition: transform 0.35s var(--ease);
+}
+#sidebarInner { height: 100%; display: flex; flex-direction: column; padding: 0 15px 18px; overflow-y: auto; }
+.brand { display: flex; align-items: center; gap: 12px; padding: 22px 8px 21px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+.brand-mark { width: 47px; height: 47px; border-radius: 14px; display: grid; place-items: center; background: linear-gradient(145deg, var(--blue-400), var(--blue-600)); color: #fff; font-size: 24px; font-weight: 700; }
+.brand-copy strong { display: block; font-size: 15px; color: #fff; }
+.brand-copy span { display: block; color: #8fa9c7; font-size: 11px; margin-top: 2px; }
+.sidebar-nav { padding-top: 16px; flex: 1; }
+.nav-section + .nav-section { margin-top: 19px; }
+.nav-label { padding: 0 12px; margin-bottom: 7px; color: #7188a4; font-size: 10.5px; font-weight: 600; }
+.nav-link { position: relative; display: flex; align-items: center; gap: 12px; min-height: 45px; padding: 0 13px; margin-bottom: 4px; border-radius: 12px; color: #b6c6d8; font-size: 13.5px; font-weight: 500; transition: all 0.18s ease; }
+.nav-link:hover { color: #fff; background: rgba(255, 255, 255, 0.055); transform: translateX(-2px); }
+.nav-link.is-active { color: #fff; background: linear-gradient(90deg, rgba(47, 125, 250, 0.24), rgba(47, 125, 250, 0.075)); box-shadow: inset 0 0 0 1px rgba(93, 155, 255, 0.12); }
+.nav-badge { margin-inline-start: auto; min-width: 22px; height: 20px; padding: 0 6px; border-radius: 20px; background: rgba(255, 255, 255, 0.1); color: #dce8f4; font-size: 10.5px; display: inline-flex; align-items: center; justify-content: center; }
+
+/* ---------- Topbar ---------- */
+.topbar { position: sticky; top: 0; z-index: 40; min-height: var(--topbar-h); background: rgba(255, 255, 255, 0.9); border-bottom: 1px solid rgba(220, 229, 239, 0.9); backdrop-filter: blur(16px); padding: 0 34px; display: flex; align-items: center; }
+#topbarInner { width: 100%; max-width: 1720px; margin: 0 auto; display: flex; align-items: center; gap: 22px; }
+.topbar-heading span { display: block; font-size: 10.5px; color: var(--muted); }
+.topbar-heading strong { display: block; font-size: 15px; font-weight: 600; color: var(--navy-900); }
+.topbar-spacer { flex: 1; }
+.topbar-actions { display: flex; align-items: center; gap: 9px; }
+
+/* ---------- Components & UI ---------- */
+.page-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
+.page-title { margin: 0; color: var(--navy-900); font-size: clamp(23px, 2.25vw, 30px); font-weight: 700; }
+.page-subtitle { margin: 7px 0 0; color: var(--muted); font-size: 12.5px; }
+.page-actions { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+
+.btn { min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 16px; border-radius: 11px; border: 1px solid transparent; font-weight: 600; font-size: 12px; white-space: nowrap; transition: all 0.18s ease; }
+.btn--primary { color: #fff; background: linear-gradient(135deg, var(--blue-500), var(--blue-700)); box-shadow: 0 7px 18px rgba(37, 99, 235, 0.2); }
+.btn--primary:hover { background: linear-gradient(135deg, #3d88ff, #1e4fd8); }
+.btn--secondary { color: var(--text-soft); background: #fff; border-color: var(--line-strong); }
+.btn--secondary:hover { color: var(--blue-600); border-color: #b7cff4; background: #fbfdff; }
+.btn--ghost { color: var(--muted); background: transparent; }
+.btn--ghost:hover { color: var(--text); background: #f2f5f9; }
+.btn--danger { color: #fff; background: var(--red); }
+.btn--danger:hover { background: #c23838; }
+.btn--green { color: #fff; background: var(--green); }
+.btn--green:hover { background: #066342; }
+
+/* Data Transfer Box (التصدير والاستيراد في الهيدر) */
+.data-transfer-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--blue-50);
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  border: 1px dashed var(--blue-400);
+}
+
+.btn--pwa {
+  color: #fff;
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 7px 18px rgba(16, 185, 129, 0.25);
+  animation: pulse-pwa 2s infinite;
+}
+.btn--pwa:hover {
+  background: linear-gradient(135deg, #34d399, #047857);
+}
+
+@keyframes pulse-pwa {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+.panel-pad { padding: 20px; }
+.panel-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 20px 22px 0; }
+.panel-header h2 { margin: 0; color: var(--navy-900); font-size: 15px; font-weight: 600; }
+
+.stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.stat-card { position: relative; overflow: hidden; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 18px 18px 14px; box-shadow: var(--shadow-sm); }
+.stat-main { display: flex; align-items: flex-start; gap: 12px; }
+.stat-icon { width: 42px; height: 42px; border-radius: 12px; background: var(--blue-50); color: var(--blue-600); display: grid; place-items: center; }
+.stat-label { display: block; color: var(--muted); font-size: 11.5px; margin-bottom: 2px; }
+.stat-value { display: block; color: var(--navy-900); font-size: clamp(22px, 2vw, 28px); font-weight: 700; }
+.stat-value .currency { font-size: 11px; color: var(--muted); font-weight: 500; }
+
+.dashboard-grid { display: grid; grid-template-columns: minmax(0, 1.72fr) minmax(295px, 0.88fr); gap: 18px; margin-top: 18px; }
+.table-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden; }
+.table-toolbar { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+.search-field input { height: 39px; padding: 0 13px; border: 1px solid var(--line); border-radius: 9px; background: #f9fbfd; font-size: 12px; }
+.select { height: 39px; border: 1px solid var(--line); border-radius: 9px; background: #f9fbfd; padding: 0 11px; font-size: 11.5px; }
+
+.table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 11.5px; }
+.table thead th { padding: 11px 14px; background: #f8fafd; color: #6e7f93; font-size: 9.8px; font-weight: 600; text-align: start; border-bottom: 1px solid var(--line); }
+.table tbody td { padding: 12px 14px; border-bottom: 1px solid #eef2f7; vertical-align: middle; }
+.table tbody tr:hover { background: #fafcff; }
+
+.badge { display: inline-flex; align-items: center; gap: 5px; min-height: 23px; padding: 2px 8px; border-radius: 20px; font-size: 9.5px; font-weight: 600; }
+.badge--success { color: #0a7a56; background: var(--green-bg); }
+.badge--warning { color: #9a661c; background: var(--amber-bg); }
+.badge--danger { color: #b83333; background: var(--red-bg); }
+
+/* ---------- Modal & Toast ---------- */
+#modalRoot:not(.is-open) { display: none; }
+.modal-overlay { position: fixed; inset: 0; z-index: 120; background: rgba(6, 23, 44, 0.52); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; padding: 22px; }
+.modal { width: 100%; max-width: 650px; background: #fff; border-radius: 20px; box-shadow: var(--shadow-lg); overflow: hidden; display: flex; flex-direction: column; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 21px 24px; border-bottom: 1px solid var(--line); }
+.modal-body { padding: 21px 24px; overflow-y: auto; max-height: 75vh; }
+.modal-footer { display: flex; align-items: center; justify-content: flex-end; gap: 9px; padding: 14px 24px; border-top: 1px solid var(--line); background: #fbfcfe; }
+
+.toast-stack { position: fixed; z-index: 220; bottom: 22px; inset-inline-start: 22px; display: flex; flex-direction: column; gap: 8px; }
+.toast { display: flex; align-items: center; gap: 9px; padding: 11px 16px; background: #fff; border: 1px solid var(--line); border-radius: 11px; box-shadow: 0 12px 32px rgba(13, 35, 64, 0.15); font-size: 12px; }
+.toast--success { border-inline-start: 4px solid var(--green); }
+.toast--error { border-inline-start: 4px solid var(--red); }
+
+@media (max-width: 1080px) {
+  .app-main { margin-right: 0; }
+  .sidebar { transform: translateX(100%); }
+  body.sidebar-open .sidebar { transform: translateX(0); }
+  .stats-grid, .dashboard-grid { grid-template-columns: 1fr; }
+}
+  </style>
+</head>
+<body>
+  <div class="app-shell" id="appShell">
+    <aside class="sidebar" id="sidebar" aria-label="القائمة الرئيسية">
+      <div id="sidebarInner"></div>
+    </aside>
+    <div class="app-main">
+      <header class="topbar" id="topbar">
+        <div id="topbarInner"></div>
+      </header>
+      <main class="main-content" id="mainContent">
+        <div id="pageRoot"></div>
+      </main>
+    </div>
+  </div>
+
+  <div id="modalRoot"></div>
+  <div class="toast-stack" id="toastRoot"></div>
+  <input type="file" id="importFileInput" accept=".json" style="display: none;">
+
+  <!-- =========================================================
+       برمجة التطبيق والمكونات (JavaScript)
+       ========================================================= -->
+  <script>
+(function (App) {
+  'use strict';
+
+  // --------- إعداد وتفعيل PWA و Service Worker بشكل كامل ---------
+  App.initPWA = () => {
+    // 1. إنشاء رمز SVG شفاف للأيقونة بدقة عالية للتوافق مع أجهزة المحمول والكمبيوتر
+    const svgIcon = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%230b2340'/><path d='M160 176h192v144a48 48 0 0 1-48 48H208a48 48 0 0 1-48-48V176Z' fill='%232f7dfa'/><path d='M128 160l128-64 128 64-128 64-128-64Z' fill='%23fff'/></svg>`;
+    const iconUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgIcon);
+
+    // 2. توليد ملف manifest.json ديناميكياً مع كافة القياسات المطلوبة
+    const manifestData = {
+      name: "مركز عمر القيسر لتعليم اللغة الإنجليزية",
+      short_name: "مركز القيسر",
+      description: "نظام إدارة وشؤون مركز عمر القيسر لتعليم اللغة الإنجليزية",
+      start_url: "./",
+      scope: "./",
+      display: "standalone",
+      orientation: "any",
+      background_color: "#07182e",
+      theme_color: "#0b2340",
+      icons: [
+        { src: iconUrl, sizes: "192x192", type: "image/svg+xml", purpose: "any maskable" },
+        { src: iconUrl, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
+      ]
+    };
+    const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
+    document.getElementById('manifestLink').setAttribute('href', URL.createObjectURL(manifestBlob));
+
+    // 3. تسديد Service Worker للعمل في وضع Offline
+    if ('serviceWorker' in navigator) {
+      const swCode = `
+        const CACHE_NAME = 'alqaysar-pwa-v2';
+        self.addEventListener('install', (e) => {
+          self.skipWaiting();
+        });
+        self.addEventListener('activate', (e) => {
+          e.waitUntil(self.clients.claim());
+        });
+        self.addEventListener('fetch', (e) => {
+          e.respondWith(
+            fetch(e.request).catch(() => caches.match(e.request))
+          );
+        });
+      `;
+      const swBlob = new Blob([swCode], { type: 'text/javascript' });
+      navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+    }
+
+    // 4. التقاط حدث التثبيت
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      App.deferredPrompt = e;
+    });
+
+    window.addEventListener('appinstalled', () => {
+      App.deferredPrompt = null;
+      App.UI.toast('تم تثبيت التطبيق بنجاح على جهازك!', 'success');
+    });
+  };
+
+  // --------- الأدوات العامة (Utils) ---------
+  const U = {};
+  U.uid = (prefix) => (prefix || 'id') + '_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
+  U.pad = (n) => String(n).padStart(2, '0');
+  U.toISO = (date) => date.getFullYear() + '-' + U.pad(date.getMonth() + 1) + '-' + U.pad(date.getDate());
+  U.todayISO = () => U.toISO(new Date());
+  
+  U.formatDate = (iso) => {
+    if (!iso) return '—';
+    const parts = String(iso).slice(0, 10).split('-').map(Number);
+    const date = new Date(parts[0], parts[1] - 1, parts[2]);
+    return new Intl.DateTimeFormat('ar-EG-u-nu-latn', { day: 'numeric', month: 'short', year: 'numeric' }).format(date);
+  };
+
+  U.number = (val) => new Intl.NumberFormat('en-US').format(Number(val) || 0);
+  U.money = (val, cur) => U.number(val) + ' <span class="currency">' + (cur || 'د.أ') + '</span>';
+  U.escapeHTML = (str) => String(str == null ? '' : str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  U.sum = (items, fn) => (items || []).reduce((acc, item) => acc + Number(typeof fn === 'function' ? fn(item) : item[fn] || 0), 0);
+
+  U.paymentState = (student) => {
+    const sub = Math.max(0, Number(student.subscription) || 0);
+    const paid = Math.max(0, Number(student.paid) || 0);
+    const rem = Math.max(0, sub - paid);
+    let status = 'unpaid';
+    if (rem <= 0 && sub > 0) status = 'paid';
+    else if (paid > 0) status = 'partial';
+    return { subscription: sub, paid: paid, remaining: rem, status: status };
+  };
+
+  App.Utils = U;
+})(window.App = window.App || {});
+
+(function (App) {
+  'use strict';
+  // --------- أيقونات SVG ---------
+  const icons = {
+    dashboard: '<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/>',
+    users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    bus: '<path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.5-.1-1-.2-1.5L20.8 7.3A2 2 0 0 0 18.9 6H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/><circle cx="7" cy="18" r="2"/><circle cx="16" cy="18" r="2"/>',
+    'graduation-cap': '<path d="M21.42 10.92a1 1 0 0 0-.02-1.84L12.83 5a1.8 1.8 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.83l8.57 3.91a1.8 1.8 0 0 0 1.66 0l8.59-3.9Z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
+    wallet: '<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h16a1 1 0 0 1 1 1v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16a1 1 0 0 0 1-1v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>',
+    download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>',
+    upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
+    smartphone: '<rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>',
+    plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+    x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+    check: '<path d="M20 6 9 17l-5-5"/>',
+    settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1Z"/>'
+  };
+
+  App.icon = (name, size, cls) => {
+    const body = icons[name] || icons.dashboard;
+    return `<svg class="icon ${cls || ''}" width="${size || 20}" height="${size || 20}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
+  };
+})(window.App = window.App || {});
+
+(function (App) {
+  'use strict';
+  // --------- البيانات الأساسية (Seed Data) ---------
+  App.createSeedData = () => {
+    const today = App.Utils.todayISO();
+    return {
+      version: 1.1,
+      settings: {
+        centerName: 'مركز عمر القيسر لتعليم اللغة الإنجليزية',
+        currency: 'د.أ',
+        phone: '+962 7 9000 0000',
+        address: 'الأردن - إربد'
+      },
+      teachers: [
+        { id: 't_1', name: 'نورة العتيبي', phone: '0791122334', specialty: 'اللغة الإنجليزية / IELTS', salary: 450, status: 'active' },
+        { id: 't_2', name: 'سارة القحطاني', phone: '0797788990', specialty: 'المحادثة والتواصل', salary: 400, status: 'active' }
+      ],
+      students: [
+        { id: 'st_1', name: 'عبدالله محمد الحربي', phone: '0781234567', course: 'إنجليزي عام B1', teacherId: 't_2', subscription: 150, paid: 150 },
+        { id: 'st_2', name: 'لينا سعد العتيبي', phone: '0787781122', course: 'IELTS', teacherId: 't_1', subscription: 200, paid: 100 },
+        { id: 'st_3', name: 'فيصل عبدالعزيز', phone: '0773344556', course: 'إنجليزي للأطفال', teacherId: 't_2', subscription: 100, paid: 100 }
+      ],
+      drivers: [
+        { id: 'd_1', name: 'خالد العتيبي', phone: '0790123456', route: 'خط إربد - الحي الشرقي', carModel: 'تويوتا 2022', status: 'available' },
+        { id: 'd_2', name: 'سالم الشهري', phone: '0790987654', route: 'خط إربد - مجمع عمان', carModel: 'هوندا 2021', status: 'available' }
+      ],
+      expenses: [
+        { id: 'e_1', category: 'لوازم مكتبية', description: 'قرطاسية وأوراق طباعة', amount: 45, date: today },
+        { id: 'e_2', category: 'صيانة', description: 'صيانة أجهزة الحاسوب', amount: 80, date: today }
+      ],
+      classes: [
+        { id: 'cl_1', course: 'IELTS', teacherId: 't_1', date: today, time: '16:00', room: 'قاعة 1' },
+        { id: 'cl_2', course: 'محادثة', teacherId: 't_2', date: today, time: '17:30', room: 'قاعة 2' }
+      ],
+      payments: [
+        { id: 'p_1', studentId: 'st_1', amount: 150, date: today },
+        { id: 'p_2', studentId: 'st_2', amount: 100, date: today }
+      ]
+    };
+  };
+})(window.App = window.App || {});
+
+(function (App) {
+  'use strict';
+  // --------- متجر البيانات (Store & Storage) ---------
+  const KEY = 'alqaysar_center_data_v2';
+
+  const Store = {
+    load: () => {
+      try {
+        const raw = localStorage.getItem(KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {
+        console.warn('خطأ في تحميل البيانات المحفوظة، سيتم تحميل البيانات الافتراضية.');
+      }
+      const seed = App.createSeedData();
+      Store.save(seed);
+      return seed;
+    },
+    save: (state) => {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(state));
+        return true;
+      } catch (e) {
+        console.error('تعذر حفظ البيانات في المتصفح.');
+        return false;
+      }
+    },
+    // تصدير البيانات كاملة إلى ملف JSON
+    exportData: () => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(App.state, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `مركز_عمر_القيسر_نسخة_احتياطية_${App.Utils.todayISO()}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      App.UI.toast('تم تصدير جميع البيانات بنجاح!', 'success');
+    },
+    // استيراد البيانات من ملف JSON
+    importData: (file) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (imported && imported.students && imported.teachers) {
+            App.state = imported;
+            Store.save(App.state);
+            App.renderSidebar();
+            App.renderTopbar();
+            App.render();
+            App.UI.toast('تم استيراد واستعادة البيانات بنجاح!', 'success');
+          } else {
+            App.UI.toast('الملف المحدد غير صالح أو تالف.', 'error');
+          }
+        } catch (err) {
+          App.UI.toast('حدث خطأ أثناء قراءة الملف.', 'error');
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  App.Store = Store;
+})(window.App = window.App || {});
+
+(function (App) {
+  'use strict';
+  // --------- واجهة المستخدم والتوست (UI Helpers) ---------
+  const UI = {};
+
+  UI.toast = (msg, type = 'success') => {
+    const root = document.getElementById('toastRoot');
+    if (!root) return;
+    const el = document.createElement('div');
+    el.className = `toast toast--${type}`;
+    el.innerHTML = `<span>${App.Utils.escapeHTML(msg)}</span>`;
+    root.appendChild(el);
+    setTimeout(() => el.remove(), 4000);
+  };
+
+  UI.openModal = (title, contentHTML, onConfirm) => {
+    const root = document.getElementById('modalRoot');
+    root.innerHTML = `
+      <div class="modal-overlay">
+        <div class="modal">
+          <header class="modal-header">
+            <h3 style="margin:0;">${title}</h3>
+            <button type="button" class="btn btn--ghost" id="closeModalBtn">${App.icon('x', 18)}</button>
+          </header>
+          <div class="modal-body">${contentHTML}</div>
+          <footer class="modal-footer">
+            <button type="button" class="btn btn--secondary" id="cancelModalBtn">إلغاء</button>
+            ${onConfirm ? '<button type="button" class="btn btn--primary" id="confirmModalBtn">حفظ والتأكيد</button>' : ''}
+          </footer>
+        </div>
+      </div>
+    `;
+    root.classList.add('is-open');
+    document.body.classList.add('modal-open');
+
+    const close = () => {
+      root.classList.remove('is-open');
+      document.body.classList.remove('modal-open');
+      root.innerHTML = '';
+    };
+
+    document.getElementById('closeModalBtn').onclick = close;
+    document.getElementById('cancelModalBtn').onclick = close;
+    if (onConfirm) {
+      document.getElementById('confirmModalBtn').onclick = () => {
+        onConfirm(root);
+        close();
+      };
+    }
+  };
+
+  App.UI = UI;
+})(window.App = window.App || {});
+
+// --------- التطبيق الرئيسي والصفحات ---------
+(function (App) {
+  'use strict';
+
+  App.state = App.Store.load();
+  App.currentTab = 'dashboard';
+  App.deferredPrompt = null;
+
+  App.init = () => {
+    App.initPWA();
+    App.renderSidebar();
+    App.renderTopbar();
+    App.render();
+
+    // ربط الحدث الخاص بزر استيراد الملفات
+    const fileInput = document.getElementById('importFileInput');
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        App.Store.importData(e.target.files[0]);
+        e.target.value = '';
+      }
+    });
+  };
+
+  App.renderSidebar = () => {
+    const inner = document.getElementById('sidebarInner');
+    inner.innerHTML = `
+      <div class="brand">
+        <div class="brand-mark">ع</div>
+        <div class="brand-copy">
+          <strong>${App.Utils.escapeHTML(App.state.settings.centerName)}</strong>
+          <span>لوحة التحكم والإدارة</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-label">الرئيسية</div>
+          <a class="nav-link ${App.currentTab === 'dashboard' ? 'is-active' : ''}" data-tab="dashboard">
+            ${App.icon('dashboard')} <span>لوحة التحكم</span>
+          </a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-label">إدارة المركز</div>
+          <a class="nav-link ${App.currentTab === 'students' ? 'is-active' : ''}" data-tab="students">
+            ${App.icon('users')} <span>الطلاب</span>
+            <span class="nav-badge">${App.state.students.length}</span>
+          </a>
+          <a class="nav-link ${App.currentTab === 'teachers' ? 'is-active' : ''}" data-tab="teachers">
+            ${App.icon('graduation-cap')} <span>المعلمون</span>
+            <span class="nav-badge">${App.state.teachers.length}</span>
+          </a>
+          <a class="nav-link ${App.currentTab === 'drivers' ? 'is-active' : ''}" data-tab="drivers">
+            ${App.icon('bus')} <span>النقل والسائقون</span>
+          </a>
+          <a class="nav-link ${App.currentTab === 'finance' ? 'is-active' : ''}" data-tab="finance">
+            ${App.icon('wallet')} <span>المالية والمصروفات</span>
+          </a>
+        </div>
+      </nav>
+    `;
+
+    inner.querySelectorAll('.nav-link').forEach(el => {
+      el.onclick = (e) => {
+        e.preventDefault();
+        App.currentTab = el.getAttribute('data-tab');
+        App.renderSidebar();
+        App.render();
+      };
+    });
+  };
+
+  App.renderTopbar = () => {
+    const inner = document.getElementById('topbarInner');
+    inner.innerHTML = `
+      <div class="topbar-heading">
+        <span>مركز عمر القيسر</span>
+        <strong>النظام المالي والأكاديمي</strong>
+      </div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions">
+        <!-- زر تثبيت التطبيق PWA ظاهرة دائمًا للتسهيل -->
+        <button class="btn btn--pwa" id="btnInstallPWA" title="تثبيت النظام كتطبيق على جهازك">
+          ${App.icon('smartphone', 18)} <span>تثبيت التطبيق</span>
+        </button>
+
+        <!-- خيارات تصدير واستيراد البيانات العامة -->
+        <div class="data-transfer-box">
+          <button class="btn btn--green" id="btnExportData" title="تصدير كافة البيانات والمدخلات كملف">
+            ${App.icon('download', 18)} <span>تصدير البيانات</span>
+          </button>
+          <button class="btn btn--secondary" id="btnImportData" title="استيراد البيانات المدخلة من ملف سابق">
+            ${App.icon('upload', 18)} <span>استيراد البيانات</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('btnExportData').onclick = () => App.Store.exportData();
+    document.getElementById('btnImportData').onclick = () => document.getElementById('importFileInput').click();
+    
+    const installBtn = document.getElementById('btnInstallPWA');
+    if (installBtn) {
+      installBtn.onclick = async () => {
+        // إذا كان المتصفح يدعم حدث التثبيت التلقائي مباشرة
+        if (App.deferredPrompt) {
+          App.deferredPrompt.prompt();
+          const { outcome } = await App.deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            App.UI.toast('جاري تثبيت التطبيق...', 'success');
+          }
+          App.deferredPrompt = null;
+        } else {
+          // تقديم تعليمات تثبيت التطبيق في حال التصفح العادي أو الأجهزة غير الداعمة للتثبيت بنقرة واحدة (مثل Safari على iOS أو بيئات المعاينة)
+          const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+          const modalHTML = isIOS ? `
+            <div style="text-align:center; padding:10px;">
+              <p style="font-size:14px; font-weight:600; margin-bottom:12px;">لتثبيت التطبيق على جهاز iPhone / iPad الخاص بك:</p>
+              <ol style="text-align:right; font-size:13px; line-height:2; color:var(--text-soft);">
+                <li>اضغط على زر **مشاركة (Share)** ${App.icon('upload', 16)} في أسفل شاشة المتصفح.</li>
+                <li>اختر من القائمة **"إضافة إلى الشاشة الرئيسية" (Add to Home Screen)**.</li>
+                <li>اضغط على **إضافة (Add)** في الأعلى.</li>
+              </ol>
+            </div>
+          ` : `
+            <div style="text-align:center; padding:10px;">
+              <p style="font-size:14px; font-weight:600; margin-bottom:12px;">لتثبيت التطبيق على جهازك أو هاتفك:</p>
+              <ol style="text-align:right; font-size:13px; line-height:2; color:var(--text-soft);">
+                <li>اضغط على قائمة المتصفح <strong>(النقاط الثلاث ⋮ في أعلى أو أسفل المتصفح)</strong>.</li>
+                <li>اختر <strong>"تثبيت التطبيق" (Install app)</strong> أو <strong>"إضافة إلى الشاشة الرئيسية" (Add to Home screen)</strong>.</li>
+              </ol>
+            </div>
+          `;
+          App.UI.openModal('تثبيت التطبيق على جهازك', modalHTML);
+        }
+      };
+    }
+  };
+
+  App.render = () => {
+    const root = document.getElementById('pageRoot');
+    if (App.currentTab === 'dashboard') App.renderDashboard(root);
+    else if (App.currentTab === 'students') App.renderStudents(root);
+    else if (App.currentTab === 'teachers') App.renderTeachers(root);
+    else if (App.currentTab === 'drivers') App.renderDrivers(root);
+    else if (App.currentTab === 'finance') App.renderFinance(root);
+  };
+
+  // --------- 1. الصفحة الرئيسية (Dashboard) ---------
+  App.renderDashboard = (container) => {
+    const U = App.Utils;
+    const totalStudents = App.state.students.length;
+    const totalIncome = U.sum(App.state.payments, 'amount');
+    const totalExpenses = U.sum(App.state.expenses, 'amount');
+    const totalDues = U.sum(App.state.students, s => U.paymentState(s).remaining);
+
+    container.innerHTML = `
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">لوحة التحكم الرئيسية</h1>
+          <p class="page-subtitle">أهلاً بك! ملخص عام لبيانات ونشاط المركز اليوم.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn--primary" id="btnQuickStudent">${App.icon('plus')} <span>إضافة طالب جديد</span></button>
+        </div>
+      </div>
+
+      <!-- بطاقات الإحصائيات -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-main">
+            <span class="stat-icon">${App.icon('users')}</span>
+            <div>
+              <span class="stat-label">إجمالي الطلاب</span>
+              <strong class="stat-value">${totalStudents}</strong>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-main">
+            <span class="stat-icon" style="background:var(--green-bg);color:var(--green);">${App.icon('wallet')}</span>
+            <div>
+              <span class="stat-label">إجمالي المقبوضات</span>
+              <strong class="stat-value">${U.money(totalIncome)}</strong>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-main">
+            <span class="stat-icon" style="background:var(--amber-bg);color:var(--amber);">${App.icon('wallet')}</span>
+            <div>
+              <span class="stat-label">المستحقات المتبقية</span>
+              <strong class="stat-value">${U.money(totalDues)}</strong>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-main">
+            <span class="stat-icon" style="background:var(--red-bg);color:var(--red);">${App.icon('wallet')}</span>
+            <div>
+              <span class="stat-label">إجمالي المصروفات</span>
+              <strong class="stat-value">${U.money(totalExpenses)}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="table-card">
+          <div class="panel-header">
+            <h2>قائمة الطلاب المسجلين مؤخراً</h2>
+          </div>
+          <div style="padding:16px;">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>اسم الطالب</th>
+                  <th>الدورة</th>
+                  <th>المبلغ الإجمالي</th>
+                  <th>المدفوع</th>
+                  <th>المتبقي</th>
+                  <th>الحالة</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${App.state.students.slice(-5).map(st => {
+                  const stState = U.paymentState(st);
+                  return `
+                    <tr>
+                      <td><strong>${U.escapeHTML(st.name)}</strong></td>
+                      <td>${U.escapeHTML(st.course)}</td>
+                      <td>${U.money(st.subscription)}</td>
+                      <td style="color:var(--green);">${U.money(st.paid)}</td>
+                      <td style="color:var(--red);">${U.money(stState.remaining)}</td>
+                      <td>
+                        <span class="badge badge--${stState.status === 'paid' ? 'success' : (stState.status === 'partial' ? 'warning' : 'danger')}">
+                          ${stState.status === 'paid' ? 'مكتمل' : (stState.status === 'partial' ? 'جزئي' : 'غير مدفوع')}
+                        </span>
+                      </td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel panel-pad">
+          <h2>الحصص القادمة</h2>
+          <div style="margin-top:14px; display:grid; gap:10px;">
+            ${App.state.classes.map(cl => {
+              const teacher = App.state.teachers.find(t => t.id === cl.teacherId);
+              return `
+                <div style="padding:10px; background:var(--bg-soft); border-radius:10px;">
+                  <strong style="display:block;">${U.escapeHTML(cl.course)}</strong>
+                  <span style="font-size:11px; color:var(--muted);">المعلم: ${teacher ? teacher.name : 'غير محدد'} | ${cl.time} (${cl.room})</span>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('btnQuickStudent').onclick = () => App.showAddStudentModal();
+  };
+
+  // --------- 2. إدارة الطلاب (Students) ---------
+  App.renderStudents = (container) => {
+    const U = App.Utils;
+    container.innerHTML = `
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">إدارة الطلاب</h1>
+          <p class="page-subtitle">سجل الطلاب والاشتراكات ومتابعة الأقساط.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn--primary" id="btnAddStudent">${App.icon('plus')} <span>إضافة طالب جديد</span></button>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div class="search-field">
+            <input type="text" id="studentSearch" placeholder="بحث باسم الطالب أو الهاتف...">
+          </div>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>الطالب</th>
+              <th>رقم الهاتف</th>
+              <th>الدورة</th>
+              <th>المعلم</th>
+              <th>الاشتراك</th>
+              <th>المدفوع</th>
+              <th>المتبقي</th>
+              <th>الإجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="studentsTableBody">
+            ${App.renderStudentsRows(App.state.students)}
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    document.getElementById('btnAddStudent').onclick = () => App.showAddStudentModal();
+    document.getElementById('studentSearch').oninput = (e) => {
+      const q = e.target.value.toLowerCase();
+      const filtered = App.state.students.filter(s => s.name.toLowerCase().includes(q) || s.phone.includes(q));
+      document.getElementById('studentsTableBody').innerHTML = App.renderStudentsRows(filtered);
+    };
+  };
+
+  App.renderStudentsRows = (list) => {
+    const U = App.Utils;
+    if (!list.length) return '<tr><td colspan="8" style="text-align:center; padding:20px;">لا يوجد طلاب مطبقون للبحث.</td></tr>';
+    return list.map(st => {
+      const teacher = App.state.teachers.find(t => t.id === st.teacherId);
+      const stState = U.paymentState(st);
+      return `
+        <tr>
+          <td><strong>${U.escapeHTML(st.name)}</strong></td>
+          <td>${U.escapeHTML(st.phone)}</td>
+          <td>${U.escapeHTML(st.course)}</td>
+          <td>${teacher ? U.escapeHTML(teacher.name) : '—'}</td>
+          <td>${U.money(st.subscription)}</td>
+          <td style="color:var(--green);">${U.money(st.paid)}</td>
+          <td style="color:var(--red);">${U.money(stState.remaining)}</td>
+          <td>
+            <button class="btn btn--secondary" onclick="App.payStudentModal('${st.id}')">تسديد دفعة</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  };
+
+  App.showAddStudentModal = () => {
+    const html = `
+      <div style="display:grid; gap:12px;">
+        <div>
+          <label style="display:block; font-size:11px; margin-bottom:4px;">اسم الطالب الثلاثي</label>
+          <input type="text" id="m_st_name" class="search-field" style="width:100%;" placeholder="مثال: أحمد علي المحمود">
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; margin-bottom:4px;">رقم الهاتف</label>
+          <input type="text" id="m_st_phone" class="search-field" style="width:100%;" placeholder="0790000000">
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; margin-bottom:4px;">الدورة التدريبية</label>
+          <input type="text" id="m_st_course" class="search-field" style="width:100%;" placeholder="مثال: IELTS / محادثة">
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; margin-bottom:4px;">المعلم المشرف</label>
+          <select id="m_st_teacher" class="select" style="width:100%;">
+            ${App.state.teachers.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
+          </select>
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; margin-bottom:4px;">قيمة الاشتراك الإجمالي (د.أ)</label>
+          <input type="number" id="m_st_sub" class="search-field" style="width:100%;" value="150">
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; margin-bottom:4px;">المبلغ المدفوع حاصلاً (د.أ)</label>
+          <input type="number" id="m_st_paid" class="search-field" style="width:100%;" value="0">
+        </div>
+      </div>
+    `;
+
+    App.UI.openModal('إضافة طالب جديد', html, () => {
+      const name = document.getElementById('m_st_name').value;
+      const phone = document.getElementById('m_st_phone').value;
+      const course = document.getElementById('m_st_course').value;
+      const teacherId = document.getElementById('m_st_teacher').value;
+      const sub = Number(document.getElementById('m_st_sub').value) || 0;
+      const paid = Number(document.getElementById('m_st_paid').value) || 0;
+
+      if (!name) return App.UI.toast('يرجى كتابة اسم الطالب', 'error');
+
+      const newSt = {
+        id: App.Utils.uid('st'),
+        name: name,
+        phone: phone,
+        course: course,
+        teacherId: teacherId,
+        subscription: sub,
+        paid: paid
+      };
+
+      App.state.students.push(newSt);
+      if (paid > 0) {
+        App.state.payments.push({
+          id: App.Utils.uid('p'),
+          studentId: newSt.id,
+          amount: paid,
+          date: App.Utils.todayISO()
+        });
+      }
+
+      App.Store.save(App.state);
+      App.render();
+      App.UI.toast('تمت إضافة الطالب بنجاح');
+    });
+  };
+
+  App.payStudentModal = (stId) => {
+    const student = App.state.students.find(s => s.id === stId);
+    if (!student) return;
+    const rem = App.Utils.paymentState(student).remaining;
+
+    const html = `
+      <div>
+        <p>تسديد دفعة جديدة للطالب: <strong>${student.name}</strong></p>
+        <p style="color:var(--red);">المبلغ المتبقي الحالي: ${App.Utils.money(rem)}</p>
+        <div style="margin-top:10px;">
+          <label style="display:block; font-size:11px; margin-bottom:4px;">المبلغ المسدد الان (د.أ)</label>
+          <input type="number" id="m_pay_amt" class="search-field" style="width:100%;" value="${rem}">
+        </div>
+      </div>
+    `;
+
+    App.UI.openModal('تسديد دفعة مالية', html, () => {
+      const amt = Number(document.getElementById('m_pay_amt').value) || 0;
+      if (amt <= 0) return App.UI.toast('يرجى إدخال مبلغ صحيح', 'error');
+
+      student.paid += amt;
+      App.state.payments.push({
+        id: App.Utils.uid('p'),
+        studentId: student.id,
+        amount: amt,
+        date: App.Utils.todayISO()
+      });
+
+      App.Store.save(App.state);
+      App.render();
+      App.UI.toast('تم تسجيل الدفعة بنجاح');
+    });
+  };
+
+  // --------- 3. المعلمون (Teachers) ---------
+  App.renderTeachers = (container) => {
+    const U = App.Utils;
+    container.innerHTML = `
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">إدارة المعلمين</h1>
+          <p class="page-subtitle">قائمة الكادر التعليمي وتخصصاتهم.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn--primary" id="btnAddTeacher">${App.icon('plus')} <span>إضافة معلم جديد</span></button>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>اسم المعلم</th>
+              <th>رقم الهاتف</th>
+              <th>التخصص</th>
+              <th>الراتب الشهري</th>
+              <th>الحالة</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${App.state.teachers.map(t => `
+              <tr>
+                <td><strong>${U.escapeHTML(t.name)}</strong></td>
+                <td>${U.escapeHTML(t.phone)}</td>
+                <td>${U.escapeHTML(t.specialty)}</td>
+                <td>${U.money(t.salary)}</td>
+                <td><span class="badge badge--success">نشط</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    document.getElementById('btnAddTeacher').onclick = () => {
+      const html = `
+        <div style="display:grid; gap:12px;">
+          <div><label style="font-size:11px;">اسم المعلم</label><input type="text" id="m_t_name" class="search-field" style="width:100%;"></div>
+          <div><label style="font-size:11px;">رقم الهاتف</label><input type="text" id="m_t_phone" class="search-field" style="width:100%;"></div>
+          <div><label style="font-size:11px;">التخصص</label><input type="text" id="m_t_spec" class="search-field" style="width:100%;"></div>
+          <div><label style="font-size:11px;">الراتب الشهري (د.أ)</label><input type="number" id="m_t_sal" class="search-field" style="width:100%;" value="400"></div>
+        </div>
+      `;
+      App.UI.openModal('إضافة معلم جديد', html, () => {
+        const name = document.getElementById('m_t_name').value;
+        if (!name) return App.UI.toast('يرجى أدخال اسم المعلم', 'error');
+        App.state.teachers.push({
+          id: U.uid('t'),
+          name: name,
+          phone: document.getElementById('m_t_phone').value,
+          specialty: document.getElementById('m_t_spec').value,
+          salary: Number(document.getElementById('m_t_sal').value) || 0,
+          status: 'active'
+        });
+        App.Store.save(App.state);
+        App.render();
+        App.UI.toast('تمت إضافة المعلم بنجاح');
+      });
+    };
+  };
+
+  // --------- 4. النقل والسائقون (Drivers) ---------
+  App.renderDrivers = (container) => {
+    const U = App.Utils;
+    container.innerHTML = `
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">إدارة النقل والسائقين</h1>
+          <p class="page-subtitle">متابعة خطوط النقل وسائقي الحافلات.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn--primary" id="btnAddDriver">${App.icon('plus')} <span>إضافة سائق جديد</span></button>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>اسم السائق</th>
+              <th>رقم الهاتف</th>
+              <th>خط السير / المسار</th>
+              <th>نوع المركبة</th>
+              <th>الحالة</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${App.state.drivers.map(d => `
+              <tr>
+                <td><strong>${U.escapeHTML(d.name)}</strong></td>
+                <td>${U.escapeHTML(d.phone)}</td>
+                <td>${U.escapeHTML(d.route)}</td>
+                <td>${U.escapeHTML(d.carModel)}</td>
+                <td><span class="badge badge--success">متاح</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    document.getElementById('btnAddDriver').onclick = () => {
+      const html = `
+        <div style="display:grid; gap:12px;">
+          <div><label style="font-size:11px;">اسم السائق</label><input type="text" id="m_d_name" class="search-field" style="width:100%;" placeholder="مثال: أحمد محمود"></div>
+          <div><label style="font-size:11px;">رقم الهاتف</label><input type="text" id="m_d_phone" class="search-field" style="width:100%;" placeholder="0790000000"></div>
+          <div><label style="font-size:11px;">خط السير / المنطقة</label><input type="text" id="m_d_route" class="search-field" style="width:100%;" placeholder="مثال: خط إربد - الحي الشرقي"></div>
+          <div><label style="font-size:11px;">نوع/موديل المركبة</label><input type="text" id="m_d_car" class="search-field" style="width:100%;" placeholder="مثال: تويوتا 2023"></div>
+        </div>
+      `;
+      App.UI.openModal('إضافة سائق جديد', html, () => {
+        const name = document.getElementById('m_d_name').value;
+        if (!name) return App.UI.toast('يرجى أدخال اسم السائق', 'error');
+        if (!App.state.drivers) App.state.drivers = [];
+        App.state.drivers.push({
+          id: U.uid('d'),
+          name: name,
+          phone: document.getElementById('m_d_phone').value,
+          route: document.getElementById('m_d_route').value,
+          carModel: document.getElementById('m_d_car').value,
+          status: 'available'
+        });
+        App.Store.save(App.state);
+        App.render();
+        App.UI.toast('تمت إضافة السائق بنجاح');
+      });
+    };
+  };
+
+  // --------- 5. المالية والمصروفات (Finance) ---------
+  App.renderFinance = (container) => {
+    const U = App.Utils;
+    const totalIncome = U.sum(App.state.payments, 'amount');
+    const totalExpenses = U.sum(App.state.expenses, 'amount');
+    const netProfit = totalIncome - totalExpenses;
+
+    container.innerHTML = `
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">المالية والمصروفات</h1>
+          <p class="page-subtitle">تقرير الإيرادات والمصروفات وصافي الأرباح.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn--primary" id="btnAddExpense">${App.icon('plus')} <span>تسجيل مصروف جديد</span></button>
+        </div>
+      </div>
+
+      <div class="stats-grid" style="margin-bottom:20px;">
+        <div class="stat-card">
+          <span class="stat-label">إجمالي المقبوضات</span>
+          <strong class="stat-value" style="color:var(--green);">${U.money(totalIncome)}</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">إجمالي المصروفات</span>
+          <strong class="stat-value" style="color:var(--red);">${U.money(totalExpenses)}</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">صافي الدخل</span>
+          <strong class="stat-value">${U.money(netProfit)}</strong>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="panel-header">
+          <h2>سجل المصروفات التشغيلية</h2>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>البند / الفئة</th>
+              <th>البيان والتفاصيل</th>
+              <th>التاريخ</th>
+              <th>المبلغ</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${App.state.expenses.map(ex => `
+              <tr>
+                <td><strong>${U.escapeHTML(ex.category)}</strong></td>
+                <td>${U.escapeHTML(ex.description)}</td>
+                <td>${U.formatDate(ex.date)}</td>
+                <td style="color:var(--red);">${U.money(ex.amount)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    document.getElementById('btnAddExpense').onclick = () => {
+      const html = `
+        <div style="display:grid; gap:12px;">
+          <div><label style="font-size:11px;">فئة المصروف</label><input type="text" id="m_ex_cat" class="search-field" style="width:100%;" placeholder="قرطاسية / صيانة / كهرباء"></div>
+          <div><label style="font-size:11px;">الوصف والتفاصيل</label><input type="text" id="m_ex_desc" class="search-field" style="width:100%;"></div>
+          <div><label style="font-size:11px;">المبلغ (د.أ)</label><input type="number" id="m_ex_amt" class="search-field" style="width:100%;" value="10"></div>
+        </div>
+      `;
+      App.UI.openModal('تسجيل مصروف جديد', html, () => {
+        const cat = document.getElementById('m_ex_cat').value;
+        const amt = Number(document.getElementById('m_ex_amt').value) || 0;
+        if (!cat || amt <= 0) return App.UI.toast('يرجى إدخال بيانات المصروف بشكل صحيح', 'error');
+
+        App.state.expenses.push({
+          id: U.uid('e'),
+          category: cat,
+          description: document.getElementById('m_ex_desc').value,
+          amount: amt,
+          date: U.todayISO()
+        });
+
+        App.Store.save(App.state);
+        App.render();
+        App.UI.toast('تم تسجيل المصروف بنجاح');
+      });
+    };
+  };
+
+  // تشغيل التطبيق عند التحميل
+  window.onload = () => {
+    App.init();
+  };
+
+})(window.App = window.App || {});
+  </script>
+</body>
+</html>
