@@ -250,7 +250,7 @@ a { color: inherit; text-decoration: none; }
     const svgIcon = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%230b2340'/><path d='M160 176h192v144a48 48 0 0 1-48 48H208a48 48 0 0 1-48-48V176Z' fill='%232f7dfa'/><path d='M128 160l128-64 128 64-128 64-128-64Z' fill='%23fff'/></svg>`;
     const iconUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgIcon);
 
-    // 2. توليد ملف manifest.json ديناميكياً مع كافة القياسات المطلوبة
+    // 2. توليد ملف manifest.json ديناميكياً مع كافة القياسات المطلوبة للتثبيت المباشر
     const manifestData = {
       name: "مركز عمر القيسر لتعليم اللغة الإنجليزية",
       short_name: "مركز القيسر",
@@ -269,34 +269,32 @@ a { color: inherit; text-decoration: none; }
     const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
     document.getElementById('manifestLink').setAttribute('href', URL.createObjectURL(manifestBlob));
 
-    // 3. تسديد Service Worker للعمل في وضع Offline
+    // 3. تسجيل Service Worker للعمل في وضع Offline ودعم PWA
     if ('serviceWorker' in navigator) {
       const swCode = `
-        const CACHE_NAME = 'alqaysar-pwa-v2';
-        self.addEventListener('install', (e) => {
-          self.skipWaiting();
-        });
-        self.addEventListener('activate', (e) => {
-          e.waitUntil(self.clients.claim());
-        });
+        const CACHE_NAME = 'alqaysar-pwa-v3';
+        self.addEventListener('install', (e) => { self.skipWaiting(); });
+        self.addEventListener('activate', (e) => { e.waitUntil(self.clients.claim()); });
         self.addEventListener('fetch', (e) => {
-          e.respondWith(
-            fetch(e.request).catch(() => caches.match(e.request))
-          );
+          e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
         });
       `;
       const swBlob = new Blob([swCode], { type: 'text/javascript' });
       navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
     }
 
-    // 4. التقاط حدث التثبيت
+    // 4. التقاط حدث التثبيت المباشر فور توفره
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       App.deferredPrompt = e;
+      const btn = document.getElementById('btnInstallPWA');
+      if (btn) btn.style.display = 'inline-flex';
     });
 
     window.addEventListener('appinstalled', () => {
       App.deferredPrompt = null;
+      const btn = document.getElementById('btnInstallPWA');
+      if (btn) btn.style.display = 'none';
       App.UI.toast('تم تثبيت التطبيق بنجاح على جهازك!', 'success');
     });
   };
@@ -598,9 +596,9 @@ a { color: inherit; text-decoration: none; }
       </div>
       <div class="topbar-spacer"></div>
       <div class="topbar-actions">
-        <!-- زر تثبيت التطبيق PWA ظاهرة دائمًا للتسهيل -->
+        <!-- زر تثبيت التطبيق PWA المباشر للكمبيوتر والهاتف -->
         <button class="btn btn--pwa" id="btnInstallPWA" title="تثبيت النظام كتطبيق على جهازك">
-          ${App.icon('smartphone', 18)} <span>تثبيت التطبيق</span>
+          ${App.icon('smartphone', 18)} <span>تحميل التطبيق للكمبيوتر والهاتف</span>
         </button>
 
         <!-- خيارات تصدير واستيراد البيانات العامة -->
@@ -621,7 +619,7 @@ a { color: inherit; text-decoration: none; }
     const installBtn = document.getElementById('btnInstallPWA');
     if (installBtn) {
       installBtn.onclick = async () => {
-        // إذا كان المتصفح يدعم حدث التثبيت التلقائي مباشرة
+        // تشغيل طلب التثبيت المباشر بنقرة واحدة عند توفره
         if (App.deferredPrompt) {
           App.deferredPrompt.prompt();
           const { outcome } = await App.deferredPrompt.userChoice;
@@ -630,27 +628,8 @@ a { color: inherit; text-decoration: none; }
           }
           App.deferredPrompt = null;
         } else {
-          // تقديم تعليمات تثبيت التطبيق في حال التصفح العادي أو الأجهزة غير الداعمة للتثبيت بنقرة واحدة (مثل Safari على iOS أو بيئات المعاينة)
-          const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-          const modalHTML = isIOS ? `
-            <div style="text-align:center; padding:10px;">
-              <p style="font-size:14px; font-weight:600; margin-bottom:12px;">لتثبيت التطبيق على جهاز iPhone / iPad الخاص بك:</p>
-              <ol style="text-align:right; font-size:13px; line-height:2; color:var(--text-soft);">
-                <li>اضغط على زر **مشاركة (Share)** ${App.icon('upload', 16)} في أسفل شاشة المتصفح.</li>
-                <li>اختر من القائمة **"إضافة إلى الشاشة الرئيسية" (Add to Home Screen)**.</li>
-                <li>اضغط على **إضافة (Add)** في الأعلى.</li>
-              </ol>
-            </div>
-          ` : `
-            <div style="text-align:center; padding:10px;">
-              <p style="font-size:14px; font-weight:600; margin-bottom:12px;">لتثبيت التطبيق على جهازك أو هاتفك:</p>
-              <ol style="text-align:right; font-size:13px; line-height:2; color:var(--text-soft);">
-                <li>اضغط على قائمة المتصفح <strong>(النقاط الثلاث ⋮ في أعلى أو أسفل المتصفح)</strong>.</li>
-                <li>اختر <strong>"تثبيت التطبيق" (Install app)</strong> أو <strong>"إضافة إلى الشاشة الرئيسية" (Add to Home screen)</strong>.</li>
-              </ol>
-            </div>
-          `;
-          App.UI.openModal('تثبيت التطبيق على جهازك', modalHTML);
+          // إذا كان التطبيق مثبتاً بالفعل أو في بيئة معاينة، يتم إظهار تنبيه بسيط وسريع
+          App.UI.toast('التطبيق مثبت بالفعل أو يرجى فتحه عبر رابط GitHub المباشر للتثبيت بنقرة واحدة.', 'success');
         }
       };
     }
