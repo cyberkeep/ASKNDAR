@@ -272,7 +272,7 @@ a { color: inherit; text-decoration: none; }
     // 3. تسجيل Service Worker للعمل في وضع Offline ودعم PWA
     if ('serviceWorker' in navigator) {
       const swCode = `
-        const CACHE_NAME = 'alqaysar-pwa-v3';
+        const CACHE_NAME = 'alqaysar-pwa-v4';
         self.addEventListener('install', (e) => { self.skipWaiting(); });
         self.addEventListener('activate', (e) => { e.waitUntil(self.clients.claim()); });
         self.addEventListener('fetch', (e) => {
@@ -288,7 +288,10 @@ a { color: inherit; text-decoration: none; }
       e.preventDefault();
       App.deferredPrompt = e;
       const btn = document.getElementById('btnInstallPWA');
-      if (btn) btn.style.display = 'inline-flex';
+      if (btn) {
+        btn.style.display = 'inline-flex';
+        btn.classList.remove('btn--disabled');
+      }
     });
 
     window.addEventListener('appinstalled', () => {
@@ -598,7 +601,7 @@ a { color: inherit; text-decoration: none; }
       <div class="topbar-actions">
         <!-- زر تثبيت التطبيق PWA المباشر للكمبيوتر والهاتف -->
         <button class="btn btn--pwa" id="btnInstallPWA" title="تثبيت النظام كتطبيق على جهازك">
-          ${App.icon('smartphone', 18)} <span>تحميل التطبيق للكمبيوتر والهاتف</span>
+          ${App.icon('smartphone', 18)} <span id="btnInstallText">تحميل التطبيق للكمبيوتر والهاتف</span>
         </button>
 
         <!-- خيارات تصدير واستيراد البيانات العامة -->
@@ -619,7 +622,7 @@ a { color: inherit; text-decoration: none; }
     const installBtn = document.getElementById('btnInstallPWA');
     if (installBtn) {
       installBtn.onclick = async () => {
-        // تشغيل طلب التثبيت المباشر بنقرة واحدة عند توفره
+        // إذا كان المتصفح جاهزاً للحدث مباشرة
         if (App.deferredPrompt) {
           App.deferredPrompt.prompt();
           const { outcome } = await App.deferredPrompt.userChoice;
@@ -627,10 +630,17 @@ a { color: inherit; text-decoration: none; }
             App.UI.toast('جاري تثبيت التطبيق...', 'success');
           }
           App.deferredPrompt = null;
-        } else {
-          // إذا كان التطبيق مثبتاً بالفعل أو في بيئة معاينة، يتم إظهار تنبيه بسيط وسريع
-          App.UI.toast('التطبيق مثبت بالفعل أو يرجى فتحه عبر رابط GitHub المباشر للتثبيت بنقرة واحدة.', 'success');
+          return;
         }
+
+        // إذا كان التطبيق مفعل كـ standalone (مثبت بالفعل وتشغله كتطبيق)
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+          App.UI.toast('أنت تعمل حالياً داخل التطبيق المثبت بالفعل!', 'success');
+          return;
+        }
+
+        // في حال تم الضغط قبل أن ينتهي المتصفح من إطلاق الحدث، ننتظر نصف ثانية أو ننبه المستخدم
+        App.UI.toast('جاري تجهيز التثبيت من المتصفح... يرجى الانتظار ثوانٍ قليلة والضغط مجدداً، أو التثبيت من قائمة المتصفح (⋮) -> إضافة إلى الشاشة الرئيسية.', 'success');
       };
     }
   };
