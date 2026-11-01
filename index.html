@@ -247,98 +247,78 @@ a { color: inherit; text-decoration: none; }
 
   // --------- إعداد وتفعيل PWA و Service Worker بشكل كامل ---------
   App.initPWA = () => {
-    // 1. كود SVG النظيف والمباشر للشعار الفاخر (كحلي وذهبي مع قبعة تخرج وكتاب)
+    // 1. كود SVG المباشر للشعار الفاخر
     App.rawSvgIcon = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='100%' height='100%'>
-      <defs>
-        <linearGradient id='bgGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
-          <stop offset='0%' stop-color='#0f2b4c'/>
-          <stop offset='50%' stop-color='#07182e'/>
-          <stop offset='100%' stop-color='#040e1c'/>
-        </linearGradient>
-        <linearGradient id='goldGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
-          <stop offset='0%' stop-color='#f6d365'/>
-          <stop offset='100%' stop-color='#fda085'/>
-        </linearGradient>
-        <linearGradient id='blueGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
-          <stop offset='0%' stop-color='#3b82f6'/>
-          <stop offset='100%' stop-color='#1d4ed8'/>
-        </linearGradient>
-      </defs>
-      <rect width='512' height='512' fill='url(#bgGrad)'/>
-      <rect x='16' y='16' width='480' height='480' fill='none' stroke='url(#goldGrad)' stroke-width='8' stroke-opacity='0.35'/>
+      <rect width='512' height='512' fill='#07182e'/>
+      <rect x='16' y='16' width='480' height='480' fill='none' stroke='#f6d365' stroke-width='12' stroke-opacity='0.8'/>
       <g>
-        <path d='M128 320c48-24 96-12 128 12 32-24 80-36 128-12v-120c-48-24-96-12-128 12-32-24-80-36-128-12z' fill='url(#blueGrad)' opacity='0.95'/>
+        <path d='M128 320c48-24 96-12 128 12 32-24 80-36 128-12v-120c-48-24-96-12-128 12-32-24-80-36-128-12z' fill='#2563eb'/>
         <path d='M256 212v120' stroke='#ffffff' stroke-width='8' stroke-linecap='round'/>
-        <path d='M256 120l144 64-144 64-144-64z' fill='url(#goldGrad)'/>
-        <path d='M160 212v52c0 32 43 58 96 58s96-26 96-58v-52' fill='none' stroke='url(#goldGrad)' stroke-width='16' stroke-linecap='round'/>
-        <path d='M376 190v72' stroke='url(#goldGrad)' stroke-width='10' stroke-linecap='round'/>
-        <circle cx='376' cy='268' r='12' fill='url(#goldGrad)'/>
+        <path d='M256 120l144 64-144 64-144-64z' fill='#f6d365'/>
+        <path d='M160 212v52c0 32 43 58 96 58s96-26 96-58v-52' fill='none' stroke='#f6d365' stroke-width='16' stroke-linecap='round'/>
+        <path d='M376 190v72' stroke='#f6d365' stroke-width='10' stroke-linecap='round'/>
+        <circle cx='376' cy='268' r='12' fill='#f6d365'/>
       </g>
     </svg>`;
 
-    // دالة إنشاء أيقونة PNG مصمتة بالكامل (Solid) لمنع نظام Windows والـ Manifest من إظهار أيقونة "م" الرمادية
+    // تحويل الـ SVG إلى Data URI قياسي للمتصفح والأجهزة
+    const svgEncoded = encodeURIComponent(App.rawSvgIcon);
+    const svgDataUrl = `data:image/svg+xml;charset=utf-8,${svgEncoded}`;
+
+    // توليد أيقونة PNG متوافقة ومصمتة بالكامل
     const generatePngDataUrl = (size) => {
       const canvas = document.createElement('canvas');
       canvas.width = size;
       canvas.height = size;
       const ctx = canvas.getContext('2d');
       
-      // تعبئة المربع بالكامل بخلفية مصمتة داكنة (الكحلي الملكي)
+      // خلفية كحلية دافئة ومصمتة
       ctx.fillStyle = '#07182e';
       ctx.fillRect(0, 0, size, size);
 
-      // رسم التدرج الداخلي
-      const grad = ctx.createLinearGradient(0, 0, size, size);
-      grad.addColorStop(0, '#10355e');
-      grad.addColorStop(0.5, '#07182e');
-      grad.addColorStop(1, '#030b16');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, size, size);
-
-      // إطار ذهبي بارز
+      // إطار ذهبي
       ctx.strokeStyle = '#f6d365';
       ctx.lineWidth = size * 0.04;
-      ctx.strokeRect(size * 0.04, size * 0.04, size * 0.92, size * 0.92);
+      ctx.strokeRect(size * 0.05, size * 0.05, size * 0.9, size * 0.9);
 
       // قبعة التخرج باللون الذهبي
       ctx.fillStyle = '#f6d365';
       ctx.beginPath();
       ctx.moveTo(size * 0.5, size * 0.22);
-      ctx.lineTo(size * 0.82, size * 0.36);
+      ctx.lineTo(size * 0.85, size * 0.36);
       ctx.lineTo(size * 0.5, size * 0.50);
-      ctx.lineTo(size * 0.18, size * 0.36);
+      ctx.lineTo(size * 0.15, size * 0.36);
       ctx.closePath();
       ctx.fill();
 
-      // شريط وقاعدة القبعة
+      // شريط وقاعدة القبعة باللون الأزرق
       ctx.fillStyle = '#2563eb';
       ctx.beginPath();
-      ctx.arc(size * 0.5, size * 0.62, size * 0.2, 0, Math.PI, false);
+      ctx.arc(size * 0.5, size * 0.62, size * 0.22, 0, Math.PI, false);
       ctx.fill();
 
-      // كتاب تعليمي باللون الأبيض الناصع
+      // كتاب باللون الأبيض
       ctx.fillStyle = '#ffffff';
-      ctx.fillRect(size * 0.3, size * 0.68, size * 0.4, size * 0.15);
+      ctx.fillRect(size * 0.28, size * 0.68, size * 0.44, size * 0.14);
 
       return canvas.toDataURL('image/png');
     };
 
-    // توليد أيقونة PNG حقيقية وموثوقة لسطح المكتب
     const pngIcon192 = generatePngDataUrl(192);
     const pngIcon512 = generatePngDataUrl(512);
 
-    // تحديث أيقونة Favicon و Apple
+    // تحديث أيقونة Favicon الرسمية في أعلى المتصفح وفي النظام
     const favEl = document.getElementById('appFavicon');
     if (favEl) favEl.setAttribute('href', pngIcon192);
     const appleEl = document.getElementById('appleTouchIcon');
     if (appleEl) appleEl.setAttribute('href', pngIcon512);
 
-    // 2. تحديث manifest.json بأيقونات PNG مصمتة بدون حواف شفافة لتجبر نظام Windows على عرضها
+    // 2. إنشاء manifest.json متوافق مع نظام Windows مع حواف مصمتة
     const manifestData = {
       name: "مركز عمر القيسر لتعليم اللغة الإنجليزية",
       short_name: "مركز القيسر",
       description: "نظام إدارة وشؤون مركز عمر القيسر لتعليم اللغة الإنجليزية",
-      start_url: "./",
+      start_url: "./?pwa=1",
       scope: "./",
       display: "standalone",
       orientation: "any",
@@ -355,10 +335,10 @@ a { color: inherit; text-decoration: none; }
     const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
     document.getElementById('manifestLink').setAttribute('href', URL.createObjectURL(manifestBlob));
 
-    // 3. تسجيل Service Worker للعمل في وضع Offline ودعم PWA
+    // 3. تسجيل Service Worker
     if ('serviceWorker' in navigator) {
       const swCode = `
-        const CACHE_NAME = 'alqaysar-pwa-v7';
+        const CACHE_NAME = 'alqaysar-pwa-v8';
         self.addEventListener('install', (e) => { self.skipWaiting(); });
         self.addEventListener('activate', (e) => { e.waitUntil(self.clients.claim()); });
         self.addEventListener('fetch', (e) => {
@@ -369,14 +349,13 @@ a { color: inherit; text-decoration: none; }
       navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
     }
 
-    // 4. التقاط حدث التثبيت المباشر فور توفره
+    // 4. التقاط حدث التثبيت المباشر
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       App.deferredPrompt = e;
       const btn = document.getElementById('btnInstallPWA');
       if (btn) {
         btn.style.display = 'inline-flex';
-        btn.classList.remove('btn--disabled');
       }
     });
 
