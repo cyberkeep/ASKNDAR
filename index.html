@@ -9,8 +9,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0b2340">
-  <meta name="description" content="نظام إدارة مركز عمر القيسر لتعليم اللغة الإنجليزية">
-  <title>مركز عمر القيسر | نظام إدارة المركز</title>
+  <meta name="description" content="نظام إدارة مركز عمر القيسي لتعليم اللغة الإنجليزية">
+  <title>مركز عمر القيسي | نظام إدارة المركز</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -21,11 +21,11 @@
   <link id="manifestLink" rel="manifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="مركز القيسر">
+  <meta name="apple-mobile-web-app-title" content="مركز القيسي">
 
   <style>
 /* =========================================================
-   نظام التصميم والأنماط البصرية - مركز عمر القيسر
+   نظام التصميم والأنماط البصرية - مركز عمر القيسي
    ========================================================= */
 :root {
   --font: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
@@ -209,29 +209,271 @@ body.sidebar-open .sidebar-backdrop { display: block; }
 .stat-value .currency { font-size: 11px; color: var(--muted); font-weight: 500; }
 
 .dashboard-grid { display: grid; grid-template-columns: minmax(0, 1.72fr) minmax(280px, 0.88fr); gap: 18px; margin-top: 18px; }
+/* ... existing code ... -->
+/* ---------- Chart & Analytics Components ---------- */
+.chart-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 14px 0;
+  flex-wrap: wrap;
+}
+.chart-donut {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+}
+.chart-donut-hole {
+  width: 96px;
+  height: 96px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.06);
+}
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-width: 160px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+}
+.legend-marker {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+  margin-inline-end: 6px;
+}
+
 .table-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden; }
-.table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.table-toolbar { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; padding: 16px 18px; border-bottom: 1px solid var(--line); }
-.search-field input { height: 39px; padding: 0 13px; border: 1px solid var(--line); border-radius: 9px; background: #f9fbfd; font-size: 12px; width: 100%; }
-.select { height: 39px; border: 1px solid var(--line); border-radius: 9px; background: #f9fbfd; padding: 0 11px; font-size: 11.5px; }
 
-.table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 11.5px; min-width: 600px; }
-.table thead th { padding: 11px 14px; background: #f8fafd; color: #6e7f93; font-size: 9.8px; font-weight: 600; text-align: start; border-bottom: 1px solid var(--line); white-space: nowrap; }
-.table tbody td { padding: 12px 14px; border-bottom: 1px solid #eef2f7; vertical-align: middle; white-space: nowrap; }
-.table tbody tr:hover { background: #fafcff; }
+/* ---------- Cards View Grid System ---------- */
+.view-toggle-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
 
-.badge { display: inline-flex; align-items: center; gap: 5px; min-height: 23px; padding: 2px 8px; border-radius: 20px; font-size: 9.5px; font-weight: 600; }
-.badge--success { color: #0a7a56; background: var(--green-bg); }
-.badge--warning { color: #9a661c; background: var(--amber-bg); }
-.badge--danger { color: #b83333; background: var(--red-bg); }
+/* تحسين وتجميل مربع البحث */
+.search-field-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+}
+.search-field-wrapper .search-icon {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+.search-field {
+  width: 100%;
+  height: 44px;
+  padding: 0 42px 0 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line-strong);
+  background: #ffffff;
+  color: var(--navy-900);
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 2px 6px rgba(16, 36, 63, 0.02);
+  transition: all 0.2s var(--ease);
+}
+.search-field:focus {
+  border-color: var(--blue-500);
+  box-shadow: 0 0 0 4px rgba(47, 125, 250, 0.12);
+  outline: none;
+}
+.search-field:focus + .search-icon {
+  color: var(--blue-600);
+}
+
+.view-btn-group {
+  display: inline-flex;
+  background: var(--bg-soft);
+  padding: 3px;
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+}
+.view-btn {
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 9px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.view-btn.is-active {
+  background: #fff;
+  color: var(--navy-900);
+  box-shadow: var(--shadow-sm);
+}
+
+/* تحسين تنسيق الجداول التفاعلية */
+.table-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: right;
+  font-size: 13px;
+}
+.table th {
+  background: #f8fafc;
+  color: var(--muted-light);
+  font-weight: 600;
+  font-size: 11.5px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line-strong);
+  white-space: nowrap;
+}
+.table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  color: var(--text-soft);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.table tbody tr {
+  transition: background-color 0.15s ease;
+}
+.table tbody tr:hover {
+  background-color: var(--blue-50);
+}
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+}
+.item-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  position: relative;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.item-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.item-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+}
+.item-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy-900);
+  margin: 0;
+}
+.item-card-sub {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.item-card-body {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+}
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-soft);
+}
+.info-row span { color: var(--muted); }
+.info-row strong { color: var(--navy-900); font-weight: 600; }
+
+.item-card-footer {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
 
 /* ---------- Modal & Toast ---------- */
 #modalRoot:not(.is-open) { display: none; }
-.modal-overlay { position: fixed; inset: 0; z-index: 120; background: rgba(6, 23, 44, 0.52); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; padding: 16px; }
-.modal { width: 100%; max-width: 650px; background: #fff; border-radius: 20px; box-shadow: var(--shadow-lg); overflow: hidden; display: flex; flex-direction: column; max-height: 90vh; }
-.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid var(--line); }
-.modal-body { padding: 18px 20px; overflow-y: auto; flex: 1; }
-.modal-footer { display: flex; align-items: center; justify-content: flex-end; gap: 9px; padding: 14px 20px; border-top: 1px solid var(--line); background: #fbfcfe; flex-wrap: wrap; }
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(6, 23, 44, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.15s ease-out;
+}
+.modal {
+  width: 100%;
+  max-width: 580px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  animation: slideUp 0.18s var(--ease);
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(12px) scale(0.98); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--line); background: #fbfdfe; }
+.modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+.modal-footer { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 14px 20px; border-top: 1px solid var(--line); background: #f9fbfd; flex-wrap: wrap; }
 
 .toast-stack { position: fixed; z-index: 220; bottom: 22px; inset-inline-start: 22px; inset-inline-end: 22px; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
 .toast { display: flex; align-items: center; gap: 9px; padding: 11px 16px; background: #fff; border: 1px solid var(--line); border-radius: 11px; box-shadow: 0 12px 32px rgba(13, 35, 64, 0.15); font-size: 12px; pointer-events: auto; }
@@ -346,9 +588,9 @@ body.sidebar-open .sidebar-backdrop { display: block; }
 
     // 2. إنشاء manifest.json متوافق تماماً مع Brave و Chrome
     const manifestData = {
-      name: "مركز عمر القيسر لتعليم اللغة الإنجليزية v2",
-      short_name: "مركز القيسر",
-      description: "نظام إدارة وشؤون مركز عمر القيسر لتعليم اللغة الإنجليزية",
+      name: "مركز عمر القيسي لتعليم اللغة الإنجليزية v2",
+      short_name: "مركز القيسي",
+      description: "نظام إدارة وشؤون مركز عمر القيسي لتعليم اللغة الإنجليزية",
       start_url: "./?pwa=1",
       scope: "./",
       display: "standalone",
@@ -446,6 +688,8 @@ body.sidebar-open .sidebar-backdrop { display: block; }
     plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
     x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
     check: '<path d="M20 6 9 17l-5-5"/>',
+    edit: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>',
+    trash: '<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>',
     settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1Z"/>'
   };
 
@@ -461,9 +705,9 @@ body.sidebar-open .sidebar-backdrop { display: block; }
   App.createSeedData = () => {
     const today = App.Utils.todayISO();
     return {
-      version: 1.1,
+      version: 1.2,
       settings: {
-        centerName: 'مركز عمر القيسر لتعليم اللغة الإنجليزية',
+        centerName: 'مركز عمر القيسي لتعليم اللغة الإنجليزية',
         currency: 'د.أ',
         phone: '+962 7 9000 0000',
         address: 'الأردن - إربد'
@@ -528,7 +772,7 @@ body.sidebar-open .sidebar-backdrop { display: block; }
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(App.state, null, 2));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `مركز_عمر_القيسر_نسخة_احتياطية_${App.Utils.todayISO()}.json`);
+      downloadAnchor.setAttribute("download", `مركز_عمر_القيسي_نسخة_احتياطية_${App.Utils.todayISO()}.json`);
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
       downloadAnchor.remove();
@@ -563,341 +807,21 @@ body.sidebar-open .sidebar-backdrop { display: block; }
 
 (function (App) {
   'use strict';
-  // --------- واجهة المستخدم والتوست (UI Helpers) ---------
-  const UI = {};
+  // --------- تهيئة المتجر وحالة العرض ---------
+  App.viewMode = 'cards'; // النمط الافتراضي للعرّض: cards أو table
 
-  UI.toast = (msg, type = 'success') => {
-    const root = document.getElementById('toastRoot');
-    if (!root) return;
-    const el = document.createElement('div');
-    el.className = `toast toast--${type}`;
-    el.innerHTML = `<span>${App.Utils.escapeHTML(msg)}</span>`;
-    root.appendChild(el);
-    setTimeout(() => el.remove(), 4000);
-  };
-
-  UI.openModal = (title, contentHTML, onConfirm) => {
-    const root = document.getElementById('modalRoot');
-    root.innerHTML = `
-      <div class="modal-overlay">
-        <div class="modal">
-          <header class="modal-header">
-            <h3 style="margin:0;">${title}</h3>
-            <button type="button" class="btn btn--ghost" id="closeModalBtn">${App.icon('x', 18)}</button>
-          </header>
-          <div class="modal-body">${contentHTML}</div>
-          <footer class="modal-footer">
-            <button type="button" class="btn btn--secondary" id="cancelModalBtn">إلغاء</button>
-            ${onConfirm ? '<button type="button" class="btn btn--primary" id="confirmModalBtn">حفظ والتأكيد</button>' : ''}
-          </footer>
-        </div>
+  App.renderViewToggle = (containerId, onToggle) => {
+    return `
+      <div class="view-btn-group">
+        <button type="button" class="view-btn ${App.viewMode === 'cards' ? 'is-active' : ''}" onclick="App.setViewMode('cards')">بطاقات</button>
+        <button type="button" class="view-btn ${App.viewMode === 'table' ? 'is-active' : ''}" onclick="App.setViewMode('table')">جدول</button>
       </div>
     `;
-    root.classList.add('is-open');
-    document.body.classList.add('modal-open');
-
-    const close = () => {
-      root.classList.remove('is-open');
-      document.body.classList.remove('modal-open');
-      root.innerHTML = '';
-    };
-
-    document.getElementById('closeModalBtn').onclick = close;
-    document.getElementById('cancelModalBtn').onclick = close;
-    if (onConfirm) {
-      document.getElementById('confirmModalBtn').onclick = () => {
-        onConfirm(root);
-        close();
-      };
-    }
   };
 
-  App.UI = UI;
-})(window.App = window.App || {});
-
-// --------- التطبيق الرئيسي والصفحات ---------
-(function (App) {
-  'use strict';
-
-  App.state = App.Store.load();
-  App.currentTab = 'dashboard';
-  App.deferredPrompt = null;
-
-  App.init = () => {
-    App.initPWA();
-    App.renderSidebar();
-    App.renderTopbar();
+  App.setViewMode = (mode) => {
+    App.viewMode = mode;
     App.render();
-
-    // ربط الحدث الخاص بزر استيراد الملفات
-    const fileInput = document.getElementById('importFileInput');
-    fileInput.addEventListener('change', (e) => {
-      if (e.target.files.length > 0) {
-        App.Store.importData(e.target.files[0]);
-        e.target.value = '';
-      }
-    });
-  };
-
-  App.renderSidebar = () => {
-    const inner = document.getElementById('sidebarInner');
-    // استخدام عنصر SVG المباشر لضمان ظهور الشعار الفاخر بدقة ودون ثغرات
-    const logoGraphic = App.rawSvgIcon || 'ع';
-    inner.innerHTML = `
-      <div class="brand">
-        <div class="brand-mark" style="background:none;padding:0;overflow:hidden;display:flex;align-items:center;justify-content:center;">${logoGraphic}</div>
-        <div class="brand-copy">
-          <strong>${App.Utils.escapeHTML(App.state.settings.centerName)}</strong>
-          <span>لوحة التحكم والإدارة</span>
-        </div>
-      </div>
-      <nav class="sidebar-nav">
-        <div class="nav-section">
-          <div class="nav-label">الرئيسية</div>
-          <a class="nav-link ${App.currentTab === 'dashboard' ? 'is-active' : ''}" data-tab="dashboard">
-            ${App.icon('dashboard')} <span>لوحة التحكم</span>
-          </a>
-        </div>
-        <div class="nav-section">
-          <div class="nav-label">إدارة المركز</div>
-          <a class="nav-link ${App.currentTab === 'students' ? 'is-active' : ''}" data-tab="students">
-            ${App.icon('users')} <span>الطلاب</span>
-            <span class="nav-badge">${App.state.students.length}</span>
-          </a>
-          <a class="nav-link ${App.currentTab === 'teachers' ? 'is-active' : ''}" data-tab="teachers">
-            ${App.icon('graduation-cap')} <span>المعلمون</span>
-            <span class="nav-badge">${App.state.teachers.length}</span>
-          </a>
-          <a class="nav-link ${App.currentTab === 'drivers' ? 'is-active' : ''}" data-tab="drivers">
-            ${App.icon('bus')} <span>النقل والسائقون</span>
-          </a>
-          <a class="nav-link ${App.currentTab === 'finance' ? 'is-active' : ''}" data-tab="finance">
-            ${App.icon('wallet')} <span>المالية والمصروفات</span>
-          </a>
-        </div>
-      </nav>
-    `;
-
-    inner.querySelectorAll('.nav-link').forEach(el => {
-      el.onclick = (e) => {
-        e.preventDefault();
-        App.currentTab = el.getAttribute('data-tab');
-        App.renderSidebar();
-        App.render();
-      };
-    });
-  };
-
-  App.renderTopbar = () => {
-    const inner = document.getElementById('topbarInner');
-    inner.innerHTML = `
-      <button class="menu-toggle-btn" id="menuToggleBtn" title="القائمة الرئيسية">
-        ${App.icon('dashboard', 22)}
-      </button>
-      <div class="topbar-heading">
-        <span>مركز عمر القيسر</span>
-        <strong>النظام المالي والأكاديمي</strong>
-      </div>
-      <div class="topbar-spacer"></div>
-      <div class="topbar-actions">
-        <!-- زر تثبيت التطبيق PWA المباشر متوافق مع Brave و Chrome -->
-        <button class="btn btn--pwa" id="btnInstallPWA" title="تثبيت النظام كتطبيق على جهازك">
-          ${App.icon('smartphone', 18)} <span id="btnInstallText">تحميل التطبيق</span>
-        </button>
-
-        <!-- خيارات تصدير واستيراد البيانات العامة -->
-        <div class="data-transfer-box">
-          <button class="btn btn--green" id="btnExportData" title="تصدير كافة البيانات والمدخلات كملف">
-            ${App.icon('download', 18)} <span>تصدير</span>
-          </button>
-          <button class="btn btn--secondary" id="btnImportData" title="استيراد البيانات المدخلة من ملف سابق">
-            ${App.icon('upload', 18)} <span>استيراد</span>
-          </button>
-        </div>
-      </div>
-    `;
-
-    // زر القائمة في الهاتف
-    const toggleBtn = document.getElementById('menuToggleBtn');
-    const backdrop = document.getElementById('sidebarBackdrop');
-    const toggleSidebar = () => document.body.classList.toggle('sidebar-open');
-    if (toggleBtn) toggleBtn.onclick = toggleSidebar;
-    if (backdrop) backdrop.onclick = () => document.body.classList.remove('sidebar-open');
-
-    document.getElementById('btnExportData').onclick = () => App.Store.exportData();
-    document.getElementById('btnImportData').onclick = () => document.getElementById('importFileInput').click();
-    
-    const installBtn = document.getElementById('btnInstallPWA');
-    if (installBtn) {
-      installBtn.onclick = async () => {
-        // إذا كان حدث التثبيت جاهزاً
-        if (App.deferredPrompt) {
-          App.deferredPrompt.prompt();
-          const { outcome } = await App.deferredPrompt.userChoice;
-          if (outcome === 'accepted') {
-            App.UI.toast('جاري تثبيت التطبيق...', 'success');
-          }
-          App.deferredPrompt = null;
-          return;
-        }
-
-        // إذا كان التطبيق مفعل كـ standalone (مثبت بالفعل)
-        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-          App.UI.toast('أنت تعمل حالياً داخل التطبيق المثبت بالفعل!', 'success');
-          return;
-        }
-
-        // إرشادات خاصة بمتصفح Brave في حال قيام المتصفح بحجب التثبيت التلقائي
-        const isBrave = (navigator.brave && await navigator.brave.isBrave()) || navigator.userAgent.includes('Brave');
-        if (isBrave) {
-          App.UI.openModal(
-            'تثبيت التطبيق في متصفح Brave',
-            `
-              <div style="text-align:center; padding:10px;">
-                <p>لتثبيت التطبيق بنقرة واحدة في متصفح <strong>Brave</strong>:</p>
-                <ol style="text-align:right; display:inline-block; line-height:2;">
-                  <li>اضغط على أيقونة التثبيت الصغيرة <strong>(⊕)</strong> الموجودة على اليمين داخل شريط العنوان (URL bar) في الأعلى.</li>
-                  <li>أو اضغط على القائمة <strong>(≡)</strong> أعلى اليسار ثم اختر <strong>"تثبيت مركز القيسر..." (Install Center...)</strong>.</li>
-                </ol>
-              </div>
-            `,
-            null
-          );
-        } else {
-          App.UI.toast('جاري تجهيز التثبيت من المتصفح... يرجى الانتظار ثوانٍ أو التثبيت من قائمة المتصفح (⋮) -> إضافة إلى الشاشة الرئيسية.', 'success');
-        }
-      };
-    }
-  };
-
-  App.render = () => {
-    // إغلاق القائمة الجانبية في الهواتف بعد التنقل
-    document.body.classList.remove('sidebar-open');
-    const root = document.getElementById('pageRoot');
-    if (App.currentTab === 'dashboard') App.renderDashboard(root);
-    else if (App.currentTab === 'students') App.renderStudents(root);
-    else if (App.currentTab === 'teachers') App.renderTeachers(root);
-    else if (App.currentTab === 'drivers') App.renderDrivers(root);
-    else if (App.currentTab === 'finance') App.renderFinance(root);
-  };
-
-  // --------- 1. الصفحة الرئيسية (Dashboard) ---------
-  App.renderDashboard = (container) => {
-    const U = App.Utils;
-    const totalStudents = App.state.students.length;
-    const totalIncome = U.sum(App.state.payments, 'amount');
-    const totalExpenses = U.sum(App.state.expenses, 'amount');
-    const totalDues = U.sum(App.state.students, s => U.paymentState(s).remaining);
-
-    container.innerHTML = `
-      <div class="page-header">
-        <div>
-          <h1 class="page-title">لوحة التحكم الرئيسية</h1>
-          <p class="page-subtitle">أهلاً بك! ملخص عام لبيانات ونشاط المركز اليوم.</p>
-        </div>
-        <div class="page-actions">
-          <button class="btn btn--primary" id="btnQuickStudent">${App.icon('plus')} <span>إضافة طالب جديد</span></button>
-        </div>
-      </div>
-
-      <!-- بطاقات الإحصائيات -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-main">
-            <span class="stat-icon">${App.icon('users')}</span>
-            <div>
-              <span class="stat-label">إجمالي الطلاب</span>
-              <strong class="stat-value">${totalStudents}</strong>
-            </div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-main">
-            <span class="stat-icon" style="background:var(--green-bg);color:var(--green);">${App.icon('wallet')}</span>
-            <div>
-              <span class="stat-label">إجمالي المقبوضات</span>
-              <strong class="stat-value">${U.money(totalIncome)}</strong>
-            </div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-main">
-            <span class="stat-icon" style="background:var(--amber-bg);color:var(--amber);">${App.icon('wallet')}</span>
-            <div>
-              <span class="stat-label">المستحقات المتبقية</span>
-              <strong class="stat-value">${U.money(totalDues)}</strong>
-            </div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-main">
-            <span class="stat-icon" style="background:var(--red-bg);color:var(--red);">${App.icon('wallet')}</span>
-            <div>
-              <span class="stat-label">إجمالي المصروفات</span>
-              <strong class="stat-value">${U.money(totalExpenses)}</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="dashboard-grid">
-        <div class="table-card">
-          <div class="panel-header">
-            <h2>قائمة الطلاب المسجلين مؤخراً</h2>
-          </div>
-          <div class="table-responsive" style="padding:16px;">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>اسم الطالب</th>
-                  <th>الدورة</th>
-                  <th>المبلغ الإجمالي</th>
-                  <th>المدفوع</th>
-                  <th>المتبقي</th>
-                  <th>الحالة</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${App.state.students.slice(-5).map(st => {
-                  const stState = U.paymentState(st);
-                  return `
-                    <tr>
-                      <td><strong>${U.escapeHTML(st.name)}</strong></td>
-                      <td>${U.escapeHTML(st.course)}</td>
-                      <td>${U.money(st.subscription)}</td>
-                      <td style="color:var(--green);">${U.money(st.paid)}</td>
-                      <td style="color:var(--red);">${U.money(stState.remaining)}</td>
-                      <td>
-                        <span class="badge badge--${stState.status === 'paid' ? 'success' : (stState.status === 'partial' ? 'warning' : 'danger')}">
-                          ${stState.status === 'paid' ? 'مكتمل' : (stState.status === 'partial' ? 'جزئي' : 'غير مدفوع')}
-                        </span>
-                      </td>
-                    </tr>
-                  `;
-                }).join('')}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="panel panel-pad">
-          <h2>الحصص القادمة</h2>
-          <div style="margin-top:14px; display:grid; gap:10px;">
-            ${App.state.classes.map(cl => {
-              const teacher = App.state.teachers.find(t => t.id === cl.teacherId);
-              return `
-                <div style="padding:10px; background:var(--bg-soft); border-radius:10px;">
-                  <strong style="display:block;">${U.escapeHTML(cl.course)}</strong>
-                  <span style="font-size:11px; color:var(--muted);">المعلم: ${teacher ? teacher.name : 'غير محدد'} | ${cl.time} (${cl.room})</span>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        </div>
-      </div>
-    `;
-
-    document.getElementById('btnQuickStudent').onclick = () => App.showAddStudentModal();
   };
 
   // --------- 2. إدارة الطلاب (Students) ---------
@@ -907,19 +831,77 @@ body.sidebar-open .sidebar-backdrop { display: block; }
       <div class="page-header">
         <div>
           <h1 class="page-title">إدارة الطلاب</h1>
-          <p class="page-subtitle">سجل الطلاب والاشتراكات ومتابعة الأقساط.</p>
+          <p class="page-subtitle">سجل الطلاب والاشتراكات ومتابعة الأقساط والتعديل والحذف.</p>
         </div>
         <div class="page-actions">
           <button class="btn btn--primary" id="btnAddStudent">${App.icon('plus')} <span>إضافة طالب جديد</span></button>
         </div>
       </div>
 
-      <div class="table-card">
-        <div class="table-toolbar">
-          <div class="search-field" style="width:100%; max-width:320px;">
-            <input type="text" id="studentSearch" placeholder="بحث باسم الطالب أو الهاتف...">
-          </div>
+      <div class="view-toggle-bar">
+        <div class="search-field-wrapper">
+          <input type="text" id="studentSearch" class="search-field" placeholder="بحث باسم الطالب أو رقم الهاتف...">
+          <span class="search-icon">${App.icon('dashboard', 18)}</span>
         </div>
+        ${App.renderViewToggle()}
+      </div>
+
+      <div id="studentsContainer">
+        ${App.renderStudentsContent(App.state.students)}
+      </div>
+    `;
+
+    document.getElementById('btnAddStudent').onclick = () => App.showStudentFormModal();
+    document.getElementById('studentSearch').oninput = (e) => {
+      const q = e.target.value.toLowerCase();
+      const filtered = App.state.students.filter(s => s.name.toLowerCase().includes(q) || (s.phone && s.phone.includes(q)));
+      document.getElementById('studentsContainer').innerHTML = App.renderStudentsContent(filtered);
+    };
+  };
+
+  App.renderStudentsContent = (list) => {
+    const U = App.Utils;
+    if (!list.length) return '<div class="panel panel-pad" style="text-align:center;">لا يوجد طلاب مطبقون للبحث.</div>';
+
+    if (App.viewMode === 'cards') {
+      return `
+        <div class="cards-grid">
+          ${list.map(st => {
+            const teacher = App.state.teachers.find(t => t.id === st.teacherId);
+            const stState = U.paymentState(st);
+            return `
+              <div class="item-card">
+                <div class="item-card-header">
+                  <div>
+                    <h3 class="item-card-title">${U.escapeHTML(st.name)}</h3>
+                    <div class="item-card-sub">📱 ${U.escapeHTML(st.phone || 'بدون رقم')}</div>
+                  </div>
+                  <span class="badge badge--${stState.status === 'paid' ? 'success' : (stState.status === 'partial' ? 'warning' : 'danger')}">
+                    ${stState.status === 'paid' ? 'مكتمل' : (stState.status === 'partial' ? 'جزئي' : 'غير مدفوع')}
+                  </span>
+                </div>
+                <div class="item-card-body">
+                  <div class="info-row"><span>الدورة:</span> <strong>${U.escapeHTML(st.course)}</strong></div>
+                  <div class="info-row"><span>المعلم المشرف:</span> <strong>${teacher ? U.escapeHTML(teacher.name) : '—'}</strong></div>
+                  <div class="info-row"><span>الاشتراك الكلي:</span> <strong>${U.money(st.subscription)}</strong></div>
+                  <div class="info-row"><span>المدفوع:</span> <strong style="color:var(--green);">${U.money(st.paid)}</strong></div>
+                  <div class="info-row"><span>المتبقي:</span> <strong style="color:var(--red);">${U.money(stState.remaining)}</strong></div>
+                </div>
+                <div class="item-card-footer">
+                  <button class="btn btn--secondary" style="flex:1; padding:0 8px; font-size:11px;" onclick="App.payStudentModal('${st.id}')">تسديد دفعة</button>
+                  <button class="btn btn--ghost" style="padding:0 8px;" title="تعديل الطالب" onclick="App.showStudentFormModal('${st.id}')">${App.icon('edit', 16)}</button>
+                  <button class="btn btn--ghost" style="padding:0 8px; color:var(--red);" title="حذف الطالب" onclick="App.deleteStudent('${st.id}')">${App.icon('trash', 16)}</button>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    // عرض الجدول المباشر
+    return `
+      <div class="table-card">
         <div class="table-responsive">
           <table class="table">
             <thead>
@@ -934,280 +916,190 @@ body.sidebar-open .sidebar-backdrop { display: block; }
                 <th>الإجراءات</th>
               </tr>
             </thead>
-            <tbody id="studentsTableBody">
-              ${App.renderStudentsRows(App.state.students)}
+            <tbody>
+              ${list.map(st => {
+                const teacher = App.state.teachers.find(t => t.id === st.teacherId);
+                const stState = U.paymentState(st);
+                return `
+                  <tr>
+                    <td><strong>${U.escapeHTML(st.name)}</strong></td>
+                    <td>${U.escapeHTML(st.phone)}</td>
+                    <td>${U.escapeHTML(st.course)}</td>
+                    <td>${teacher ? U.escapeHTML(teacher.name) : '—'}</td>
+                    <td>${U.money(st.subscription)}</td>
+                    <td style="color:var(--green);">${U.money(st.paid)}</td>
+                    <td style="color:var(--red);">${U.money(stState.remaining)}</td>
+                    <td>
+                      <div style="display:flex; gap:4px;">
+                        <button class="btn btn--secondary" style="padding:0 8px;" onclick="App.payStudentModal('${st.id}')">تسديد</button>
+                        <button class="btn btn--ghost" style="padding:0 6px;" onclick="App.showStudentFormModal('${st.id}')">${App.icon('edit', 16)}</button>
+                        <button class="btn btn--ghost" style="padding:0 6px; color:var(--red);" onclick="App.deleteStudent('${st.id}')">${App.icon('trash', 16)}</button>
+                      </div>
+                    </td>
+                  </tr>
+                `;
+              }).join('')}
             </tbody>
           </table>
         </div>
       </div>
     `;
-
-    document.getElementById('btnAddStudent').onclick = () => App.showAddStudentModal();
-    document.getElementById('studentSearch').oninput = (e) => {
-      const q = e.target.value.toLowerCase();
-      const filtered = App.state.students.filter(s => s.name.toLowerCase().includes(q) || s.phone.includes(q));
-      document.getElementById('studentsTableBody').innerHTML = App.renderStudentsRows(filtered);
-    };
   };
 
-  App.renderStudentsRows = (list) => {
-    const U = App.Utils;
-    if (!list.length) return '<tr><td colspan="8" style="text-align:center; padding:20px;">لا يوجد طلاب مطبقون للبحث.</td></tr>';
-    return list.map(st => {
-      const teacher = App.state.teachers.find(t => t.id === st.teacherId);
-      const stState = U.paymentState(st);
-      return `
-        <tr>
-          <td><strong>${U.escapeHTML(st.name)}</strong></td>
-          <td>${U.escapeHTML(st.phone)}</td>
-          <td>${U.escapeHTML(st.course)}</td>
-          <td>${teacher ? U.escapeHTML(teacher.name) : '—'}</td>
-          <td>${U.money(st.subscription)}</td>
-          <td style="color:var(--green);">${U.money(st.paid)}</td>
-          <td style="color:var(--red);">${U.money(stState.remaining)}</td>
-          <td>
-            <button class="btn btn--secondary" onclick="App.payStudentModal('${st.id}')">تسديد دفعة</button>
-          </td>
-        </tr>
-      `;
-    }).join('');
-  };
-
-  App.showAddStudentModal = () => {
-    const html = `
-      <div style="display:grid; gap:12px;">
-        <div>
-          <label style="display:block; font-size:11px; margin-bottom:4px;">اسم الطالب الثلاثي</label>
-          <input type="text" id="m_st_name" class="search-field" style="width:100%;" placeholder="مثال: أحمد علي المحمود">
-        </div>
-        <div>
-          <label style="display:block; font-size:11px; margin-bottom:4px;">رقم الهاتف</label>
-          <input type="text" id="m_st_phone" class="search-field" style="width:100%;" placeholder="0790000000">
-        </div>
-        <div>
-          <label style="display:block; font-size:11px; margin-bottom:4px;">الدورة التدريبية</label>
-          <input type="text" id="m_st_course" class="search-field" style="width:100%;" placeholder="مثال: IELTS / محادثة">
-        </div>
-        <div>
-          <label style="display:block; font-size:11px; margin-bottom:4px;">المعلم المشرف</label>
-          <select id="m_st_teacher" class="select" style="width:100%;">
-            ${App.state.teachers.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
-          </select>
-        </div>
-        <div>
-          <label style="display:block; font-size:11px; margin-bottom:4px;">قيمة الاشتراك الإجمالي (د.أ)</label>
-          <input type="number" id="m_st_sub" class="search-field" style="width:100%;" value="150">
-        </div>
-        <div>
-          <label style="display:block; font-size:11px; margin-bottom:4px;">المبلغ المدفوع حاصلاً (د.أ)</label>
-          <input type="number" id="m_st_paid" class="search-field" style="width:100%;" value="0">
-        </div>
-      </div>
-    `;
-
-    App.UI.openModal('إضافة طالب جديد', html, () => {
-      const name = document.getElementById('m_st_name').value;
-      const phone = document.getElementById('m_st_phone').value;
-      const course = document.getElementById('m_st_course').value;
-      const teacherId = document.getElementById('m_st_teacher').value;
-      const sub = Number(document.getElementById('m_st_sub').value) || 0;
-      const paid = Number(document.getElementById('m_st_paid').value) || 0;
-
-      if (!name) return App.UI.toast('يرجى كتابة اسم الطالب', 'error');
-
-      const newSt = {
-        id: App.Utils.uid('st'),
-        name: name,
-        phone: phone,
-        course: course,
-        teacherId: teacherId,
-        subscription: sub,
-        paid: paid
-      };
-
-      App.state.students.push(newSt);
-      if (paid > 0) {
-        App.state.payments.push({
-          id: App.Utils.uid('p'),
-          studentId: newSt.id,
-          amount: paid,
-          date: App.Utils.todayISO()
-        });
-      }
-
-      App.Store.save(App.state);
-      App.render();
-      App.UI.toast('تمت إضافة الطالب بنجاح');
-    });
-  };
-
-  App.payStudentModal = (stId) => {
-    const student = App.state.students.find(s => s.id === stId);
-    if (!student) return;
-    const rem = App.Utils.paymentState(student).remaining;
-
-    const html = `
-      <div>
-        <p>تسديد دفعة جديدة للطالب: <strong>${student.name}</strong></p>
-        <p style="color:var(--red);">المبلغ المتبقي الحالي: ${App.Utils.money(rem)}</p>
-        <div style="margin-top:10px;">
-          <label style="display:block; font-size:11px; margin-bottom:4px;">المبلغ المسدد الان (د.أ)</label>
-          <input type="number" id="m_pay_amt" class="search-field" style="width:100%;" value="${rem}">
-        </div>
-      </div>
-    `;
-
-    App.UI.openModal('تسديد دفعة مالية', html, () => {
-      const amt = Number(document.getElementById('m_pay_amt').value) || 0;
-      if (amt <= 0) return App.UI.toast('يرجى إدخال مبلغ صحيح', 'error');
-
-      student.paid += amt;
-      App.state.payments.push({
-        id: App.Utils.uid('p'),
-        studentId: student.id,
-        amount: amt,
-        date: App.Utils.todayISO()
-      });
-
-      App.Store.save(App.state);
-      App.render();
-      App.UI.toast('تم تسجيل الدفعة بنجاح');
-    });
-  };
-
-  // --------- 3. المعلمون (Teachers) ---------
+  // --------- 3. إدارة المعلمين (Teachers) ---------
   App.renderTeachers = (container) => {
     const U = App.Utils;
     container.innerHTML = `
       <div class="page-header">
         <div>
           <h1 class="page-title">إدارة المعلمين</h1>
-          <p class="page-subtitle">قائمة الكادر التعليمي وتخصصاتهم.</p>
+          <p class="page-subtitle">سجل المعلمين والرواتب والتخصصات والتعديل والحذف.</p>
         </div>
         <div class="page-actions">
           <button class="btn btn--primary" id="btnAddTeacher">${App.icon('plus')} <span>إضافة معلم جديد</span></button>
         </div>
       </div>
 
-      <div class="table-card">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>اسم المعلم</th>
-              <th>رقم الهاتف</th>
-              <th>التخصص</th>
-              <th>الراتب الشهري</th>
-              <th>الحالة</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${App.state.teachers.map(t => `
-              <tr>
-                <td><strong>${U.escapeHTML(t.name)}</strong></td>
-                <td>${U.escapeHTML(t.phone)}</td>
-                <td>${U.escapeHTML(t.specialty)}</td>
-                <td>${U.money(t.salary)}</td>
-                <td><span class="badge badge--success">نشط</span></td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
+      <div class="view-toggle-bar">
+        <div></div>
+        ${App.renderViewToggle()}
       </div>
+
+      ${App.viewMode === 'cards' ? `
+        <div class="cards-grid">
+          ${App.state.teachers.map(t => `
+            <div class="item-card">
+              <div class="item-card-header">
+                <div>
+                  <h3 class="item-card-title">${U.escapeHTML(t.name)}</h3>
+                  <div class="item-card-sub">📱 ${U.escapeHTML(t.phone || 'بدون رقم')}</div>
+                </div>
+              </div>
+              <div class="item-card-body">
+                <div class="info-row"><span>التخصص:</span> <strong>${U.escapeHTML(t.specialty)}</strong></div>
+                <div class="info-row"><span>الراتب الشهري:</span> <strong style="color:var(--blue-600);">${U.money(t.salary)}</strong></div>
+              </div>
+              <div class="item-card-footer">
+                <button class="btn btn--secondary" style="flex:1; padding:0 8px;" onclick="App.showTeacherFormModal('${t.id}')">${App.icon('edit', 15)} تعديل</button>
+                <button class="btn btn--ghost" style="padding:0 8px; color:var(--red);" onclick="App.deleteTeacher('${t.id}')">${App.icon('trash', 15)} حذف</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      ` : `
+        <div class="table-card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>اسم المعلم</th>
+                  <th>رقم الهاتف</th>
+                  <th>التخصص</th>
+                  <th>الراتب الشهري</th>
+                  <th>الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${App.state.teachers.map(t => `
+                  <tr>
+                    <td><strong>${U.escapeHTML(t.name)}</strong></td>
+                    <td>${U.escapeHTML(t.phone)}</td>
+                    <td>${U.escapeHTML(t.specialty)}</td>
+                    <td>${U.money(t.salary)}</td>
+                    <td>
+                      <div style="display:flex; gap:4px;">
+                        <button class="btn btn--ghost" style="padding:0 6px;" onclick="App.showTeacherFormModal('${t.id}')">${App.icon('edit', 16)}</button>
+                        <button class="btn btn--ghost" style="padding:0 6px; color:var(--red);" onclick="App.deleteTeacher('${t.id}')">${App.icon('trash', 16)}</button>
+                      </div>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `}
     `;
 
-    document.getElementById('btnAddTeacher').onclick = () => {
-      const html = `
-        <div style="display:grid; gap:12px;">
-          <div><label style="font-size:11px;">اسم المعلم</label><input type="text" id="m_t_name" class="search-field" style="width:100%;"></div>
-          <div><label style="font-size:11px;">رقم الهاتف</label><input type="text" id="m_t_phone" class="search-field" style="width:100%;"></div>
-          <div><label style="font-size:11px;">التخصص</label><input type="text" id="m_t_spec" class="search-field" style="width:100%;"></div>
-          <div><label style="font-size:11px;">الراتب الشهري (د.أ)</label><input type="number" id="m_t_sal" class="search-field" style="width:100%;" value="400"></div>
-        </div>
-      `;
-      App.UI.openModal('إضافة معلم جديد', html, () => {
-        const name = document.getElementById('m_t_name').value;
-        if (!name) return App.UI.toast('يرجى أدخال اسم المعلم', 'error');
-        App.state.teachers.push({
-          id: U.uid('t'),
-          name: name,
-          phone: document.getElementById('m_t_phone').value,
-          specialty: document.getElementById('m_t_spec').value,
-          salary: Number(document.getElementById('m_t_sal').value) || 0,
-          status: 'active'
-        });
-        App.Store.save(App.state);
-        App.render();
-        App.UI.toast('تمت إضافة المعلم بنجاح');
-      });
-    };
+    document.getElementById('btnAddTeacher').onclick = () => App.showTeacherFormModal();
   };
 
-  // --------- 4. النقل والسائقون (Drivers) ---------
+  // --------- 4. المواصلات والسائقون (Drivers) ---------
   App.renderDrivers = (container) => {
     const U = App.Utils;
     container.innerHTML = `
       <div class="page-header">
         <div>
-          <h1 class="page-title">إدارة النقل والسائقين</h1>
-          <p class="page-subtitle">متابعة خطوط النقل وسائقي الحافلات.</p>
+          <h1 class="page-title">النقل والمواصلات</h1>
+          <p class="page-subtitle">إدارة السائقين والخطوط والحافلات.</p>
         </div>
         <div class="page-actions">
           <button class="btn btn--primary" id="btnAddDriver">${App.icon('plus')} <span>إضافة سائق جديد</span></button>
         </div>
       </div>
 
-      <div class="table-card">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>اسم السائق</th>
-              <th>رقم الهاتف</th>
-              <th>خط السير / المسار</th>
-              <th>نوع المركبة</th>
-              <th>الحالة</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${App.state.drivers.map(d => `
-              <tr>
-                <td><strong>${U.escapeHTML(d.name)}</strong></td>
-                <td>${U.escapeHTML(d.phone)}</td>
-                <td>${U.escapeHTML(d.route)}</td>
-                <td>${U.escapeHTML(d.carModel)}</td>
-                <td><span class="badge badge--success">متاح</span></td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
+      <div class="view-toggle-bar">
+        <div></div>
+        ${App.renderViewToggle()}
       </div>
+
+      ${App.viewMode === 'cards' ? `
+        <div class="cards-grid">
+          ${App.state.drivers.map(d => `
+            <div class="item-card">
+              <div class="item-card-header">
+                <div>
+                  <h3 class="item-card-title">${U.escapeHTML(d.name)}</h3>
+                  <div class="item-card-sub">📱 ${U.escapeHTML(d.phone || 'بدون رقم')}</div>
+                </div>
+              </div>
+              <div class="item-card-body">
+                <div class="info-row"><span>خط السير / المسار:</span> <strong>${U.escapeHTML(d.route)}</strong></div>
+                <div class="info-row"><span>نوع المركبة:</span> <strong>${U.escapeHTML(d.carModel)}</strong></div>
+              </div>
+              <div class="item-card-footer">
+                <button class="btn btn--secondary" style="flex:1; padding:0 8px;" onclick="App.showDriverFormModal('${d.id}')">${App.icon('edit', 15)} تعديل</button>
+                <button class="btn btn--ghost" style="padding:0 8px; color:var(--red);" onclick="App.deleteDriver('${d.id}')">${App.icon('trash', 15)} حذف</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      ` : `
+        <div class="table-card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>السائق</th>
+                  <th>رقم الهاتف</th>
+                  <th>خط السير / المسار</th>
+                  <th>نوع المركبة</th>
+                  <th>الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${App.state.drivers.map(d => `
+                  <tr>
+                    <td><strong>${U.escapeHTML(d.name)}</strong></td>
+                    <td>${U.escapeHTML(d.phone)}</td>
+                    <td>${U.escapeHTML(d.route)}</td>
+                    <td>${U.escapeHTML(d.carModel)}</td>
+                    <td>
+                      <div style="display:flex; gap:4px;">
+                        <button class="btn btn--ghost" style="padding:0 6px;" onclick="App.showDriverFormModal('${d.id}')">${App.icon('edit', 16)}</button>
+                        <button class="btn btn--ghost" style="padding:0 6px; color:var(--red);" onclick="App.deleteDriver('${d.id}')">${App.icon('trash', 16)}</button>
+                      </div>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `}
     `;
 
-    document.getElementById('btnAddDriver').onclick = () => {
-      const html = `
-        <div style="display:grid; gap:12px;">
-          <div><label style="font-size:11px;">اسم السائق</label><input type="text" id="m_d_name" class="search-field" style="width:100%;" placeholder="مثال: أحمد محمود"></div>
-          <div><label style="font-size:11px;">رقم الهاتف</label><input type="text" id="m_d_phone" class="search-field" style="width:100%;" placeholder="0790000000"></div>
-          <div><label style="font-size:11px;">خط السير / المنطقة</label><input type="text" id="m_d_route" class="search-field" style="width:100%;" placeholder="مثال: خط إربد - الحي الشرقي"></div>
-          <div><label style="font-size:11px;">نوع/موديل المركبة</label><input type="text" id="m_d_car" class="search-field" style="width:100%;" placeholder="مثال: تويوتا 2023"></div>
-        </div>
-      `;
-      App.UI.openModal('إضافة سائق جديد', html, () => {
-        const name = document.getElementById('m_d_name').value;
-        if (!name) return App.UI.toast('يرجى أدخال اسم السائق', 'error');
-        if (!App.state.drivers) App.state.drivers = [];
-        App.state.drivers.push({
-          id: U.uid('d'),
-          name: name,
-          phone: document.getElementById('m_d_phone').value,
-          route: document.getElementById('m_d_route').value,
-          carModel: document.getElementById('m_d_car').value,
-          status: 'available'
-        });
-        App.Store.save(App.state);
-        App.render();
-        App.UI.toast('تمت إضافة السائق بنجاح');
-      });
-    };
+    document.getElementById('btnAddDriver').onclick = () => App.showDriverFormModal();
   };
 
   // --------- 5. المالية والمصروفات (Finance) ---------
@@ -1215,13 +1107,13 @@ body.sidebar-open .sidebar-backdrop { display: block; }
     const U = App.Utils;
     const totalIncome = U.sum(App.state.payments, 'amount');
     const totalExpenses = U.sum(App.state.expenses, 'amount');
-    const netProfit = totalIncome - totalExpenses;
+    const net = totalIncome - totalExpenses;
 
     container.innerHTML = `
       <div class="page-header">
         <div>
-          <h1 class="page-title">المالية والمصروفات</h1>
-          <p class="page-subtitle">تقرير الإيرادات والمصروفات وصافي الأرباح.</p>
+          <h1 class="page-title">الحسابات والمالية</h1>
+          <p class="page-subtitle">متابعة الإيرادات والمصروفات وصافي الأرباح.</p>
         </div>
         <div class="page-actions">
           <button class="btn btn--primary" id="btnAddExpense">${App.icon('plus')} <span>تسجيل مصروف جديد</span></button>
@@ -1230,75 +1122,726 @@ body.sidebar-open .sidebar-backdrop { display: block; }
 
       <div class="stats-grid" style="margin-bottom:20px;">
         <div class="stat-card">
-          <span class="stat-label">إجمالي المقبوضات</span>
+          <span class="stat-label">المقبوضات الإجمالية</span>
           <strong class="stat-value" style="color:var(--green);">${U.money(totalIncome)}</strong>
         </div>
         <div class="stat-card">
-          <span class="stat-label">إجمالي المصروفات</span>
+          <span class="stat-label">المصروفات الإجمالية</span>
           <strong class="stat-value" style="color:var(--red);">${U.money(totalExpenses)}</strong>
         </div>
         <div class="stat-card">
-          <span class="stat-label">صافي الدخل</span>
-          <strong class="stat-value">${U.money(netProfit)}</strong>
+          <span class="stat-label">صافي الرصيد</span>
+          <strong class="stat-value">${U.money(net)}</strong>
         </div>
       </div>
 
-      <div class="table-card">
-        <div class="panel-header">
-          <h2>سجل المصروفات التشغيلية</h2>
+      <div class="view-toggle-bar">
+        <h2 style="font-size:15px; margin:0; font-weight:700;">سجل المصروفات والنفقات</h2>
+        ${App.renderViewToggle()}
+      </div>
+
+      ${App.viewMode === 'cards' ? `
+        <div class="cards-grid">
+          ${App.state.expenses.map(e => `
+            <div class="item-card">
+              <div class="item-card-header">
+                <div>
+                  <h3 class="item-card-title">${U.escapeHTML(e.category)}</h3>
+                  <div class="item-card-sub">📅 ${U.formatDate(e.date)}</div>
+                </div>
+                <strong style="color:var(--red); font-size:15px;">${U.money(e.amount)}</strong>
+              </div>
+              <div class="item-card-body">
+                <div class="info-row"><span>الوصف والتفاصيل:</span> <strong>${U.escapeHTML(e.description || '—')}</strong></div>
+              </div>
+              <div class="item-card-footer">
+                <button class="btn btn--ghost" style="width:100%; color:var(--red);" onclick="App.deleteExpense('${e.id}')">${App.icon('trash', 15)} حذف المصروف</button>
+              </div>
+            </div>
+          `).join('')}
         </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>البند / الفئة</th>
-              <th>البيان والتفاصيل</th>
-              <th>التاريخ</th>
-              <th>المبلغ</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${App.state.expenses.map(ex => `
-              <tr>
-                <td><strong>${U.escapeHTML(ex.category)}</strong></td>
-                <td>${U.escapeHTML(ex.description)}</td>
-                <td>${U.formatDate(ex.date)}</td>
-                <td style="color:var(--red);">${U.money(ex.amount)}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
+      ` : `
+        <div class="table-card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>التاريخ</th>
+                  <th>الفئة</th>
+                  <th>البيان / الوصف</th>
+                  <th>المبلغ</th>
+                  <th>الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${App.state.expenses.map(e => `
+                  <tr>
+                    <td>${U.formatDate(e.date)}</td>
+                    <td>${U.escapeHTML(e.category)}</td>
+                    <td>${U.escapeHTML(e.description)}</td>
+                    <td style="color:var(--red);"><strong>${U.money(e.amount)}</strong></td>
+                    <td>
+                      <button class="btn btn--ghost" style="padding:0 6px; color:var(--red);" title="حذف المصروف" onclick="App.deleteExpense('${e.id}')">${App.icon('trash', 16)}</button>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `}
+    `;
+
+    document.getElementById('btnAddExpense').onclick = () => App.showExpenseModal();
+  };
+
+  App.showExpenseModal = () => {
+    const html = `
+      <div style="display:grid; gap:12px;">
+        <div>
+          <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">فئة المصروف</label>
+          <input type="text" id="m_e_cat" class="search-field" style="width:100%;" placeholder="مثال: قرطاسية، فواتير، صيانة">
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">تفاصيل المصروف</label>
+          <input type="text" id="m_e_desc" class="search-field" style="width:100%;" placeholder="وصف سريع للبند">
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">المبلغ (د.أ) *</label>
+          <input type="number" id="m_e_amount" class="search-field" style="width:100%;" placeholder="0">
+        </div>
       </div>
     `;
 
-    document.getElementById('btnAddExpense').onclick = () => {
-      const html = `
-        <div style="display:grid; gap:12px;">
-          <div><label style="font-size:11px;">فئة المصروف</label><input type="text" id="m_ex_cat" class="search-field" style="width:100%;" placeholder="قرطاسية / صيانة / كهرباء"></div>
-          <div><label style="font-size:11px;">الوصف والتفاصيل</label><input type="text" id="m_ex_desc" class="search-field" style="width:100%;"></div>
-          <div><label style="font-size:11px;">المبلغ (د.أ)</label><input type="number" id="m_ex_amt" class="search-field" style="width:100%;" value="10"></div>
-        </div>
-      `;
-      App.UI.openModal('تسجيل مصروف جديد', html, () => {
-        const cat = document.getElementById('m_ex_cat').value;
-        const amt = Number(document.getElementById('m_ex_amt').value) || 0;
-        if (!cat || amt <= 0) return App.UI.toast('يرجى إدخال بيانات المصروف بشكل صحيح', 'error');
+    App.UI.openModal('تسجيل مصروف جديد', html, () => {
+      const cat = document.getElementById('m_e_cat').value || 'عام';
+      const desc = document.getElementById('m_e_desc').value || '';
+      const amount = Number(document.getElementById('m_e_amount').value) || 0;
 
-        App.state.expenses.push({
-          id: U.uid('e'),
-          category: cat,
-          description: document.getElementById('m_ex_desc').value,
-          amount: amt,
-          date: U.todayISO()
-        });
+      if (amount <= 0) {
+        App.UI.toast('يرجى كتابة مبلغ المصروف', 'error');
+        return false;
+      }
 
-        App.Store.save(App.state);
-        App.render();
-        App.UI.toast('تم تسجيل المصروف بنجاح');
+      App.state.expenses.push({
+        id: App.Utils.uid('e'),
+        category: cat,
+        description: desc,
+        amount: amount,
+        date: App.Utils.todayISO()
       });
-    };
+
+      App.Store.save(App.state);
+      App.render();
+      App.UI.toast('تم تسجيل المصروف بنجاح');
+      return true;
+    });
   };
 
-  // تشغيل التطبيق عند التحميل
+  App.deleteExpense = (expenseId) => {
+    App.UI.openModal('حذف مصروف', '<p style="margin:0; font-size:13px;">هل أنت تأكد من حذف هذا المصروف؟</p>', () => {
+      App.state.expenses = App.state.expenses.filter(e => e.id !== expenseId);
+      App.Store.save(App.state);
+      App.render();
+      App.UI.toast('تم حذف المصروف');
+      return true;
+    });
+  };
+
+  // --------- نظام واجهة المستخدم والتعديل والحذف (UI & Modals) ---------
+  const UI = {
+    toast: (msg, type = 'success') => {
+      const root = document.getElementById('toastRoot');
+      if (!root) return;
+      const el = document.createElement('div');
+      el.className = `toast toast--${type}`;
+      el.innerHTML = `<span>${App.icon(type === 'success' ? 'check' : 'x', 16)}</span> <span>${App.Utils.escapeHTML(msg)}</span>`;
+      root.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 200);
+      }, 3000);
+    },
+
+    openModal: (title, contentHtml, onConfirm) => {
+      const root = document.getElementById('modalRoot');
+      if (!root) return;
+      root.className = 'modal-overlay is-open';
+      document.body.classList.add('modal-open');
+
+      root.innerHTML = `
+        <div class="modal">
+          <div class="modal-header">
+            <h3 style="margin:0; font-size:16px; font-weight:700; color:var(--navy-900);">${App.Utils.escapeHTML(title)}</h3>
+            <button type="button" class="btn btn--ghost" id="modalCloseBtn" style="padding:4px 8px;">${App.icon('x', 18)}</button>
+          </div>
+          <div class="modal-body">${contentHtml}</div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn--secondary" id="modalCancelBtn">إلغاء</button>
+            ${onConfirm ? `<button type="button" class="btn btn--primary" id="modalConfirmBtn">حفظ وتأكيد</button>` : ''}
+          </div>
+        </div>
+      `;
+
+      const closeModal = () => {
+        root.className = 'modal-overlay';
+        root.innerHTML = '';
+        document.body.classList.remove('modal-open');
+      };
+
+      document.getElementById('modalCloseBtn').onclick = closeModal;
+      document.getElementById('modalCancelBtn').onclick = closeModal;
+      root.onclick = (e) => { if (e.target === root) closeModal(); };
+
+      if (onConfirm) {
+        document.getElementById('modalConfirmBtn').onclick = () => {
+          const res = onConfirm();
+          if (res !== false) closeModal();
+        };
+      }
+    }
+  };
+
+  App.UI = UI;
+
+  // --------- لوحة التحكم الرئيسية (Dashboard & Chart) ---------
+  App.renderDashboard = (container) => {
+    const U = App.Utils;
+    const students = App.state.students;
+    let paidCount = 0, partialCount = 0, unpaidCount = 0;
+
+    students.forEach(st => {
+      const stState = U.paymentState(st);
+      if (stState.status === 'paid') paidCount++;
+      else if (stState.status === 'partial') partialCount++;
+      else unpaidCount++;
+    });
+
+    const totalStudents = students.length || 1;
+    const paidPct = Math.round((paidCount / totalStudents) * 100);
+    const partialPct = Math.round((partialCount / totalStudents) * 100);
+    const unpaidPct = 100 - paidPct - partialPct;
+
+    const totalIncome = U.sum(App.state.payments, 'amount');
+    const totalExpenses = U.sum(App.state.expenses, 'amount');
+
+    container.innerHTML = `
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">لوحة التحكم الرئيسية</h1>
+          <p class="page-subtitle">ملخص أداء المركز والطلاب والرسوم المتبقية.</p>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-main">
+            <div class="stat-icon">${App.icon('users')}</div>
+            <div>
+              <span class="stat-label">إجمالي الطلاب</span>
+              <strong class="stat-value">${U.number(students.length)}</strong>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-main">
+            <div class="stat-icon" style="background:#e8f8f1; color:var(--green);">${App.icon('graduation-cap')}</div>
+            <div>
+              <span class="stat-label">المعلمون</span>
+              <strong class="stat-value">${U.number(App.state.teachers.length)}</strong>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-main">
+            <div class="stat-icon" style="background:var(--amber-bg); color:var(--amber);">${App.icon('wallet')}</div>
+            <div>
+              <span class="stat-label">المقبوضات الإجمالية</span>
+              <strong class="stat-value" style="color:var(--green);">${U.money(totalIncome)}</strong>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-main">
+            <div class="stat-icon" style="background:var(--red-bg); color:var(--red);">${App.icon('bus')}</div>
+            <div>
+              <span class="stat-label">السائقون والخطوط</span>
+              <strong class="stat-value">${U.number(App.state.drivers.length)}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="panel panel-pad">
+          <div class="panel-header" style="padding:0 0 16px;">
+            <h2>حالة دفع اشتراكات الطلاب</h2>
+          </div>
+          <div class="chart-container">
+            <div class="chart-donut" style="background: conic-gradient(var(--green) 0% ${paidPct}%, var(--amber) ${paidPct}% ${paidPct + partialPct}%, var(--red) ${paidPct + partialPct}% 100%);">
+              <div class="chart-donut-hole">
+                <strong style="font-size:20px; color:var(--navy-900);">${students.length}</strong>
+                <span style="font-size:10px; color:var(--muted);">طالب</span>
+              </div>
+            </div>
+            <div class="chart-legend">
+              <div class="legend-item">
+                <div><span class="legend-marker" style="background:var(--green);"></span> مكتمل السداد</div>
+                <strong>${paidCount} (${paidPct}%)</strong>
+              </div>
+              <div class="legend-item">
+                <div><span class="legend-marker" style="background:var(--amber);"></span> دفع جزئي</div>
+                <strong>${partialCount} (${partialPct}%)</strong>
+              </div>
+              <div class="legend-item">
+                <div><span class="legend-marker" style="background:var(--red);"></span> لم يدفع بعد</div>
+                <strong>${unpaidCount} (${unpaidPct}%)</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-pad">
+          <div class="panel-header" style="padding:0 0 14px;">
+            <h2>إجراءات سريعة</h2>
+          </div>
+          <div style="display:grid; gap:10px;">
+            <button class="btn btn--primary" onclick="App.showStudentFormModal()">${App.icon('plus')} إضافة طالب جديد</button>
+            <button class="btn btn--secondary" onclick="App.showTeacherFormModal()">${App.icon('plus')} إضافة معلم جديد</button>
+            <button class="btn btn--secondary" onclick="App.showDriverFormModal()">${App.icon('plus')} إضافة سائق جديد</button>
+          </div>
+        </div>
+      </div>
+    `;
+  };
+
+  // --------- نماذج وإجراءات الطلاب ----------
+  App.showStudentFormModal = (studentId) => {
+    const isEdit = !!studentId;
+    const st = isEdit ? App.state.students.find(s => s.id === studentId) : { name: '', phone: '', course: 'إنجليزي عام', teacherId: '', subscription: 100, paid: 0 };
+    if (!st) return;
+
+    const html = `
+      <div style="display:grid; gap:12px;">
+        <div>
+          <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">اسم الطالب *</label>
+          <input type="text" id="m_st_name" class="search-field" style="width:100%;" value="${App.Utils.escapeHTML(st.name)}" placeholder="الاسم الكامل">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div>
+            <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">رقم الهاتف</label>
+            <input type="text" id="m_st_phone" class="search-field" style="width:100%;" value="${App.Utils.escapeHTML(st.phone)}" placeholder="07xxxxxxxx">
+          </div>
+          <div>
+            <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">الدورة / الصف</label>
+            <input type="text" id="m_st_course" class="search-field" style="width:100%;" value="${App.Utils.escapeHTML(st.course)}" placeholder="اسم الدورة">
+          </div>
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">المعلم المشرف</label>
+          <select id="m_st_teacher" class="search-field" style="width:100%;">
+            <option value="">-- اختر المعلم --</option>
+            ${App.state.teachers.map(t => `<option value="${t.id}" ${st.teacherId === t.id ? 'selected' : ''}>${App.Utils.escapeHTML(t.name)}</option>`).join('')}
+          </select>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div>
+            <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">مبلغ الاشتراك الكلي (د.أ)</label>
+            <input type="number" id="m_st_sub" class="search-field" style="width:100%;" value="${st.subscription}">
+          </div>
+          <div>
+            <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">المبلغ المدفوع حالياً (د.أ)</label>
+            <input type="number" id="m_st_paid" class="search-field" style="width:100%;" value="${st.paid}">
+          </div>
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:600; margin-bottom:6px;">تحديد حالة الدفع السريع:</label>
+          <div style="display:flex; gap:8px;">
+            <button type="button" class="btn btn--secondary" style="flex:1; font-size:11px;" onclick="document.getElementById('m_st_paid').value = document.getElementById('m_st_sub').value;">مدفوع بالكامل</button>
+            <button type="button" class="btn btn--secondary" style="flex:1; font-size:11px;" onclick="document.getElementById('m_st_paid').value = Math.round(Number(document.getElementById('m_st_sub').value)/2);">دفع جزئي (النصف)</button>
+            <button type="button" class="btn btn--secondary" style="flex:1; font-size:11px;" onclick="document.getElementById('m_st_paid').value = 0;">لم يدفع</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    App.UI.openModal(isEdit ? 'تعديل بيانات الطالب' : 'إضافة طالب جديد', html, () => {
+      const name = document.getElementById('m_st_name').value.trim();
+      if (!name) {
+        App.UI.toast('يرجى كتابة اسم الطالب', 'error');
+        return false;
+      }
+
+      const phone = document.getElementById('m_st_phone').value.trim();
+      const course = document.getElementById('m_st_course').value.trim() || 'إنجليزي عام';
+      const teacherId = document.getElementById('m_st_teacher').value;
+      const sub = Number(document.getElementById('m_st_sub').value) || 0;
+      const paid = Number(document.getElementById('m_st_paid').value) || 0;
+
+      if (isEdit) {
+        st.name = name; st.phone = phone; st.course = course;
+        st.teacherId = teacherId; st.subscription = sub; st.paid = paid;
+      } else {
+        App.state.students.push({
+          id: App.Utils.uid('st'),
+          name, phone, course, teacherId, subscription: sub, paid
+        });
+      }
+
+      App.Store.save(App.state);
+      App.render();
+      App.UI.toast(isEdit ? 'تم تعديل بيانات الطالب بنجاح' : 'تم إضافة الطالب بنجاح');
+      return true;
+    });
+  };
+
+  App.payStudentModal = (studentId) => {
+    const st = App.state.students.find(s => s.id === studentId);
+    if (!st) return;
+    const state = App.Utils.paymentState(st);
+
+    const html = `
+      <div style="font-size:13px; line-height:1.6;">
+        <p style="margin-top:0;">تسديد دفعة للطالب: <strong>${App.Utils.escapeHTML(st.name)}</strong></p>
+        <div style="background:var(--bg-soft); padding:10px; border-radius:10px; margin-bottom:12px;">
+          <div>الاشتراك الكلي: <strong>${App.Utils.money(st.subscription)}</strong></div>
+          <div>المدفوع سابقاً: <strong style="color:var(--green);">${App.Utils.money(st.paid)}</strong></div>
+          <div>المتبقي حالياً: <strong style="color:var(--red);">${App.Utils.money(state.remaining)}</strong></div>
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">مبلغ الدفعة الجديدة (د.أ) *</label>
+          <input type="number" id="m_pay_amount" class="search-field" style="width:100%;" value="${state.remaining}">
+        </div>
+      </div>
+    `;
+
+    App.UI.openModal('تسديد دفعة مالية', html, () => {
+      const payAmount = Number(document.getElementById('m_pay_amount').value) || 0;
+      if (payAmount <= 0) {
+        App.UI.toast('يرجى كتابة قيمة الدفعة', 'error');
+        return false;
+      }
+
+      st.paid += payAmount;
+      App.state.payments.push({
+        id: App.Utils.uid('p'),
+        studentId: st.id,
+        amount: payAmount,
+        date: App.Utils.todayISO()
+      });
+
+      App.Store.save(App.state);
+      App.render();
+      App.UI.toast('تم تسديد الدفعة بنجاح');
+      return true;
+    });
+  };
+
+  App.deleteStudent = (studentId) => {
+    App.UI.openModal('حذف طالب', '<p style="margin:0; font-size:13px;">هل أنت تأكد من حذف هذا الطالب نهائياً من النظام؟</p>', () => {
+      App.state.students = App.state.students.filter(s => s.id !== studentId);
+      App.Store.save(App.state);
+      App.render();
+      App.UI.toast('تم حذف الطالب');
+      return true;
+    });
+  };
+
+  // --------- نماذج وإجراءات المعلمين السريعة ----------
+  App.showTeacherFormModal = (teacherId) => {
+    const isEdit = !!teacherId;
+    const t = isEdit ? App.state.teachers.find(x => x.id === teacherId) : { name: '', phone: '', specialty: 'اللغة الإنجليزية', salary: 400 };
+
+    const html = `
+      <div style="display:grid; gap:12px;">
+        <div>
+          <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">اسم المعلم *</label>
+          <input type="text" id="m_t_name" class="search-field" style="width:100%;" value="${App.Utils.escapeHTML(t.name)}" placeholder="الاسم الكامل">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div>
+            <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">رقم الهاتف</label>
+            <input type="text" id="m_t_phone" class="search-field" style="width:100%;" value="${App.Utils.escapeHTML(t.phone)}">
+          </div>
+          <div>
+            <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">التخصص</label>
+            <input type="text" id="m_t_spec" class="search-field" style="width:100%;" value="${App.Utils.escapeHTML(t.specialty)}">
+          </div>
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">الراتب الشهري (د.أ)</label>
+          <input type="number" id="m_t_salary" class="search-field" style="width:100%;" value="${t.salary}">
+        </div>
+      </div>
+    `;
+
+    App.UI.openModal(isEdit ? 'تعديل بيانات المعلم' : 'إضافة معلم جديد', html, () => {
+      const name = document.getElementById('m_t_name').value.trim();
+      if (!name) { App.UI.toast('يرجى كتابة اسم المعلم', 'error'); return false; }
+      const phone = document.getElementById('m_t_phone').value.trim();
+      const spec = document.getElementById('m_t_spec').value.trim() || 'اللغة الإنجليزية';
+      const salary = Number(document.getElementById('m_t_salary').value) || 0;
+
+      if (isEdit) {
+        t.name = name; t.phone = phone; t.specialty = spec; t.salary = salary;
+      } else {
+        App.state.teachers.push({ id: App.Utils.uid('t'), name, phone, specialty: spec, salary, status: 'active' });
+      }
+
+      App.Store.save(App.state);
+      App.renderSidebar();
+      App.render();
+      App.UI.toast(isEdit ? 'تم تعديل المعلم بنجاح' : 'تم إضافة المعلم بنجاح');
+      return true;
+    });
+  };
+
+  App.deleteTeacher = (teacherId) => {
+    App.UI.openModal('حذف معلم', '<p style="margin:0; font-size:13px;">هل أنت تأكد من حذف هذا المعلم؟</p>', () => {
+      App.state.teachers = App.state.teachers.filter(t => t.id !== teacherId);
+      App.Store.save(App.state);
+      App.renderSidebar();
+      App.render();
+      App.UI.toast('تم حذف المعلم');
+      return true;
+    });
+  };
+
+  // --------- نماذج وإجراءات السائقين ----------
+  App.showDriverFormModal = (driverId) => {
+    const isEdit = !!driverId;
+    const d = isEdit ? App.state.drivers.find(x => x.id === driverId) : { name: '', phone: '', route: 'خط المركز', carModel: 'تويوتا' };
+
+    const html = `
+      <div style="display:grid; gap:12px;">
+        <div>
+          <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">اسم السائق *</label>
+          <input type="text" id="m_d_name" class="search-field" style="width:100%;" value="${App.Utils.escapeHTML(d.name)}">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div>
+            <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">رقم الهاتف</label>
+            <input type="text" id="m_d_phone" class="search-field" style="width:100%;" value="${App.Utils.escapeHTML(d.phone)}">
+          </div>
+          <div>
+            <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">نوع المركبة</label>
+            <input type="text" id="m_d_car" class="search-field" style="width:100%;" value="${App.Utils.escapeHTML(d.carModel)}">
+          </div>
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:600; margin-bottom:4px;">خط السير / المسار</label>
+          <input type="text" id="m_d_route" class="search-field" style="width:100%;" value="${App.Utils.escapeHTML(d.route)}">
+        </div>
+      </div>
+    `;
+
+    App.UI.openModal(isEdit ? 'تعديل بيانات السائق' : 'إضافة سائق جديد', html, () => {
+      const name = document.getElementById('m_d_name').value.trim();
+      if (!name) { App.UI.toast('يرجى كتابة اسم السائق', 'error'); return false; }
+      const phone = document.getElementById('m_d_phone').value.trim();
+      const car = document.getElementById('m_d_car').value.trim();
+      const route = document.getElementById('m_d_route').value.trim();
+
+      if (isEdit) {
+        d.name = name; d.phone = phone; d.carModel = car; d.route = route;
+      } else {
+        App.state.drivers.push({ id: App.Utils.uid('d'), name, phone, carModel: car, route, status: 'available' });
+      }
+
+      App.Store.save(App.state);
+      App.render();
+      App.UI.toast(isEdit ? 'تم تعديل السائق بنجاح' : 'تم إضافة السائق بنجاح');
+      return true;
+    });
+  };
+
+  App.deleteDriver = (driverId) => {
+    App.UI.openModal('حذف سائق', '<p style="margin:0; font-size:13px;">هل أنت تأكد من حذف هذا السائق؟</p>', () => {
+      App.state.drivers = App.state.drivers.filter(d => d.id !== driverId);
+      App.Store.save(App.state);
+      App.render();
+      App.UI.toast('تم حذف السائق');
+      return true;
+    });
+  };
+
+  // --------- دالة الرندر الشاملة للتبويبات ----------
+  App.render = () => {
+    const pageRoot = document.getElementById('pageRoot');
+    if (!pageRoot) return;
+
+    switch (App.currentTab) {
+      case 'dashboard':
+        App.renderDashboard(pageRoot);
+        break;
+      case 'students':
+        App.renderStudents(pageRoot);
+        break;
+      case 'teachers':
+        App.renderTeachers(pageRoot);
+        break;
+      case 'drivers':
+        App.renderDrivers(pageRoot);
+        break;
+      case 'finance':
+        App.renderFinance(pageRoot);
+        break;
+      default:
+        App.renderDashboard(pageRoot);
+        break;
+    }
+  };
+
+  // --------- رسم القائمة الجانبية والشريط العلوي ---------
+  App.renderSidebar = () => {
+    const sidebar = document.getElementById('sidebarInner');
+    if (!sidebar) return;
+
+    sidebar.innerHTML = `
+      <div class="brand">
+        <div class="brand-mark">
+          ${App.rawSvgIcon}
+        </div>
+        <div class="brand-copy">
+          <strong>مركز عمر القيسي</strong>
+          <span>تعليم اللغة الإنجليزية</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-label">الرئيسية</div>
+          <a href="#" class="nav-link ${App.currentTab === 'dashboard' ? 'is-active' : ''}" data-tab="dashboard">
+            ${App.icon('dashboard')} <span>لوحة التحكم</span>
+          </a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-label">الإدارة والصفوف</div>
+          <a href="#" class="nav-link ${App.currentTab === 'students' ? 'is-active' : ''}" data-tab="students">
+            ${App.icon('users')} <span>الطلاب</span>
+            <span class="nav-badge">${App.state.students.length}</span>
+          </a>
+          <a href="#" class="nav-link ${App.currentTab === 'teachers' ? 'is-active' : ''}" data-tab="teachers">
+            ${App.icon('graduation-cap')} <span>المعلمون</span>
+            <span class="nav-badge">${App.state.teachers.length}</span>
+          </a>
+          <a href="#" class="nav-link ${App.currentTab === 'drivers' ? 'is-active' : ''}" data-tab="drivers">
+            ${App.icon('bus')} <span>المواصلات والسائقون</span>
+          </a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-label">المالية</div>
+          <a href="#" class="nav-link ${App.currentTab === 'finance' ? 'is-active' : ''}" data-tab="finance">
+            ${App.icon('wallet')} <span>الحسابات والمصروفات</span>
+          </a>
+        </div>
+      </nav>
+    `;
+
+    sidebar.querySelectorAll('.nav-link').forEach(link => {
+      link.onclick = (e) => {
+        e.preventDefault();
+        App.currentTab = link.dataset.tab;
+        App.renderSidebar();
+        App.render();
+      };
+    });
+  };
+
+  App.renderTopbar = () => {
+    const topbar = document.getElementById('topbarInner');
+    if (!topbar) return;
+
+    topbar.innerHTML = `
+      <button class="menu-toggle-btn" id="menuToggleBtn">${App.icon('dashboard', 22)}</button>
+      <div class="topbar-heading">
+        <span>مركز عمر القيسي</span>
+        <strong>النظام الإداري المحوسب</strong>
+      </div>
+      <div class="topbar-spacer"></div>
+      
+      <div class="topbar-actions">
+        <!-- زر تثبيت الـ PWA -->
+        <button type="button" class="btn btn--pwa" id="btnInstallPWA">
+          ${App.icon('download', 18)} <span>تحميل التطبيق (Brave / الكمبيوتر)</span>
+        </button>
+
+        <!-- زر التصدير والاستيراد -->
+        <div class="data-transfer-box">
+          <button type="button" class="btn btn--secondary" id="btnExportData" style="min-height:34px; padding:0 10px; font-size:11px;">
+            ${App.icon('download', 14)} <span>تصدير البيانات</span>
+          </button>
+          <button type="button" class="btn btn--secondary" id="btnImportData" style="min-height:34px; padding:0 10px; font-size:11px;">
+            ${App.icon('upload', 14)} <span>استيراد البيانات</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    // ربط زر القائمة الهامبرغر في الهواتف
+    document.getElementById('menuToggleBtn').onclick = () => {
+      document.body.classList.toggle('sidebar-open');
+    };
+    document.getElementById('sidebarBackdrop').onclick = () => {
+      document.body.classList.remove('sidebar-open');
+    };
+
+    // ربط زر التصدير والاستيراد
+    document.getElementById('btnExportData').onclick = () => App.Store.exportData();
+    document.getElementById('btnImportData').onclick = () => document.getElementById('importFileInput').click();
+
+    // ربط زر التثبيت الـ PWA
+    const installBtn = document.getElementById('btnInstallPWA');
+    if (installBtn) {
+      installBtn.onclick = async () => {
+        if (App.deferredPrompt) {
+          App.deferredPrompt.prompt();
+          const { outcome } = await App.deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            App.deferredPrompt = null;
+            installBtn.style.display = 'none';
+          }
+        } else {
+          App.UI.openModal(
+            'تثبيت التطبيق على متصفح Brave / الأجهزة',
+            `
+              <div style="font-size:13px; line-height:1.7;">
+                <p>لتثبيت التطبيق بسهولة على متصفح Brave أو Chrome أو الأيفون:</p>
+                <ol style="padding-inline-start:20px; margin:10px 0;">
+                  <li>في متصفح Brave/Chrome: انقر على أيقونة التثبيت <strong>(⊕)</strong> في نهاية شريط الرابط بالأعلى.</li>
+                  <li>أو من قائمة المتصفح (⋮) اختر <strong>"إضافة إلى الشاشة الرئيسية"</strong> أو <strong>"Install Application"</strong>.</li>
+                </ol>
+              </div>
+            `,
+            null
+          );
+        }
+      };
+    }
+  };
+
+  // --------- تهيئة النظام وتثبيت الأحداث ---------
+  App.init = () => {
+    App.state = App.Store.load();
+    App.currentTab = 'dashboard';
+
+    App.initPWA();
+    App.renderSidebar();
+    App.renderTopbar();
+    App.render();
+
+    // ربط ملف الاستيراد
+    const fileInput = document.getElementById('importFileInput');
+    if (fileInput) {
+      fileInput.onchange = (e) => {
+        if (e.target.files && e.target.files[0]) {
+          App.Store.importData(e.target.files[0]);
+          fileInput.value = '';
+        }
+      };
+    }
+  };
+
+  // تشغيل النظام فور جاهزية الصفحة
   window.onload = () => {
     App.init();
   };
